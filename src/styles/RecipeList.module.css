@@ -1,0 +1,9 @@
+.recipeList {
+    width: 90vw;
+    margin-left: 5vw;
+    margin-top: 10vh;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}

@@ -1,0 +1,65 @@
+.recipeDiv {
+    width: var(--recipe-item-width);
+    max-width: 90vw;
+    height: var(--recipe-item-height);
+    border-radius: var(--border-radius);
+    background-color: #d7b674;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin: 0;
+    padding-bottom: 30px;
+    align-items: center;
+    box-shadow: 00px 10px 20px #2f2c27;
+}
+
+.title {
+        text-align: center;
+}
+
+.recipeDetails {
+        display: flex;
+        gap: 10px;
+}
+
+.recipeDetails li {
+        list-style-type: none;
+}
+
+.img {
+    width: var(--recipe-item-width);
+    max-width: 90vw;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.text {
+    height: calc(var(--recipe-item-height) - var(--recipe-item-width));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.link {
+    text-decoration: none;
+    color: black;
+}
+
+.overlay{
+    position: absolute;
+    width: var(--recipe-item-width);
+    height: var(--recipe-item-height);
+    z-index: 99;
+    border-radius: var(--border-radius);
+    background-color: rgba(0, 0, 0, 0);
+    transition: background-color 100ms;
+}
+
+.overlay:hover {
+    background-color: rgba(68, 50, 6, 0.1);
+}
+
+.overlay:active {
+    background-color: rgba(68, 50, 6, 0.3);
+}

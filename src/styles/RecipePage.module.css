@@ -1,0 +1,19 @@
+.recipeDiv {
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    text-align: center;
+}
+
+.img {
+    position: absolute;
+    width: var(--recipe-item-width);
+    min-width: 400px;
+    top: 50px;
+    left: 50px;
+    max-width: 900px;
+    margin: auto;
+}
+

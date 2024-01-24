@@ -1,0 +1,37 @@
+.searchBar {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+
+}
+
+.searchBar * {
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.27);
+}
+
+.input {
+    width: 100%;
+    height: 100%;
+    border: 1px solid black;
+    font-size: large;
+    font-weight: lighter;
+}
+
+.btn {
+    width: 50%;
+    height: 100%;
+    border: 0;
+    background-color: white;
+    transition: background-color 100ms;
+    font-weight: bold;
+    font-size: large;
+}
+
+.btn:hover:enabled {
+    background-color: chocolate;
+}
