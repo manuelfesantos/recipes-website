@@ -17,3 +17,24 @@
     margin: auto;
 }
 
+.link {
+    background-color: #ccc3ab;
+    border: 0;
+    height: 30px;
+    width: 50vw;
+    text-decoration: none;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.link:hover {
+    background-color: #c5bc8a;
+}
+
+.links {
+    width: 100vw;
+    display: flex;
+    justify-content: space-around;
+}

@@ -12,18 +12,14 @@ export default function RecipePage(recipe: RecipeDetails) {
     <div className={styles.recipeDiv}>
       <RecipeProfile title={recipe.label} image={recipe.image} />
       <IngredientList ingredients={recipe.ingredients} />
-      <Link href={recipe.url} target="_blank">
-        Check the preparation steps in {recipe.source}
-      </Link>
-      <button>
-        <Link href={".."}>Back to Recipes</Link>
-      </button>
-      {Object.keys(recipe).map((k) => (
-        <>
-          <p key={k}>{k + ": " + JSON.stringify(recipe[k])}</p>
-          <br />
-        </>
-      ))}
+      <div className={styles.links}>
+        <Link className={styles.link} href={".."}>
+          Back to Recipes
+        </Link>
+        <Link className={styles.link} href={recipe.url} target="_blank">
+          Check the preparation steps in {recipe.source}
+        </Link>
+      </div>
     </div>
   );
 }

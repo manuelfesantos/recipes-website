@@ -6,8 +6,6 @@ import RecipeList from "@/components/RecipeList";
 import Header from "@/components/Header";
 import { getRecipes } from "@/util/api-client";
 
-const inter = Inter({ subsets: ["latin"] });
-
 export default function HomePage() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const handleLoadRecipes = async (searchText: string) => {
