@@ -70,8 +70,13 @@ export default function HomePage() {
           loadMoreRecipes={() => loadMoreRecipes(nextRecipes)}
           hasNextRecipes={nextRecipes.length > 0}
         />
-        <img className={styles.edamamBadge} src="/edamam-badge.svg" />
       </div>
+      <img
+        className={
+          recipes.length > 0 ? styles.edamamBadge : styles.edamamBadgeBottom
+        }
+        src="/edamam-badge.svg"
+      />
     </>
   );
 }

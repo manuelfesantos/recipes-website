@@ -9,4 +9,13 @@
 
 .edamamBadge {
     width: 300px;
+    margin-left: calc(50vw - 150px);
+    margin-bottom: 20px;
+}
+
+.edamamBadgeBottom {
+    position: fixed;
+    bottom: 20px;
+    width: 300px;
+    margin-left: calc(50vw - 150px);
 }
