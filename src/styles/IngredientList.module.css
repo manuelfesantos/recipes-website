@@ -1,6 +1,6 @@
 .ingredients {
-    width: 30vw;
-    min-width: 400px;
+    width: var(--recipe-item-width);
+    min-width: 30vw;
     max-width: 90vw;
     display: flex;
     flex-direction: column;

@@ -17,6 +17,7 @@ export const getRecipesBySearchWord = async (searchWord: string) =>
 export const getRecipesByHref = async (href: string) => {
   const apiResult = fetch(href, requestOptions);
   const recipes = (await apiResult).text();
+  console.log(recipes);
   const parsedRecipes: RecipeListResponse = JSON.parse(await recipes);
   return parsedRecipes;
 };

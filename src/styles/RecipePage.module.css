@@ -17,8 +17,8 @@
 }
 
 .img {
-    width: 30vw;
-    min-width: 400px;
+    width: var(--recipe-item-width);
+    min-width: 30vw;
     top: 50px;
     left: 50px;
     max-width: 90vw;

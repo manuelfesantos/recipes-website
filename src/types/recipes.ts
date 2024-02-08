@@ -3,7 +3,7 @@ export interface RecipeListResponse {
   from: number;
   hits: RecipeItemWrapper[];
   to: number;
-  _links: { next: Link };
+  _links: { next?: Link };
 }
 
 export interface RecipeItemWrapper {

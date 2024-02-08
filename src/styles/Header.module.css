@@ -1,5 +1,7 @@
 .header {
-    width: 70vw;
+    width: var(--recipe-item-width);
+    min-width: 70vw;
+    max-width: 90vw;
     display: flex;
     flex-direction: column;
     justify-content: center;

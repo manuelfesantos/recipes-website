@@ -10,10 +10,18 @@ export default function HomePage() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [nextRecipes, setNextRecipes] = useState<string>("");
   const handleLoadRecipes = async (searchText: string) => {
+    setNextRecipes("");
     const recipesList = await getRecipesBySearchWord(searchText);
     console.log(recipesList);
     const recipes = recipesList.hits.map((r) => r.recipe);
     if (recipes) {
+      const nextRecipesLink = recipesList._links.next?.href;
+
+      if (nextRecipesLink) {
+        sessionStorage.setItem("next-recipes", nextRecipesLink);
+        setNextRecipes(nextRecipesLink);
+      }
+
       sessionStorage.setItem("search-text", searchText);
       sessionStorage.setItem("recipes", JSON.stringify(recipes));
       setRecipes(recipes);
@@ -26,17 +34,25 @@ export default function HomePage() {
     if (recipes) {
       setRecipes(recipes);
     }
-  }, []);
-
-  const handleScroll = (event: UIEvent<HTMLDivElement>) => {
-    if (event.currentTarget.clientTop > 10) {
-      loadMoreRecipes(nextRecipes);
+    const nextRecipesLink = sessionStorage.getItem("next-recipes") ?? "";
+    if (nextRecipesLink) {
+      setNextRecipes(nextRecipesLink);
     }
-  };
+  }, []);
   const loadMoreRecipes = async (href: string) => {
-    const newRecipeList = await getRecipesByHref(href);
-    const newRecipes = newRecipeList.hits.map((hit) => hit.recipe);
-    setRecipes((prevState) => [...prevState, ...newRecipes]);
+    if (nextRecipes) {
+      const newRecipeList = await getRecipesByHref(href);
+
+      const newRecipes = newRecipeList.hits.map((hit) => hit.recipe);
+      setRecipes((prevState) => [...prevState, ...newRecipes]);
+
+      const newRecipeLink = newRecipeList._links.next?.href;
+      if (newRecipeLink) {
+        setNextRecipes(newRecipeLink);
+      } else {
+        setNextRecipes("");
+      }
+    }
   };
 
   return (
@@ -47,13 +63,15 @@ export default function HomePage() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <body onScroll={handleScroll}>
-        <div className={styles.homeDiv}>
-          <Header handleLoadRecipes={handleLoadRecipes} />
-          <RecipeList recipes={recipes} />
-          <img className={styles.edamamBadge} src="/edamam-badge.svg" />
-        </div>
-      </body>
+      <div className={styles.homeDiv}>
+        <Header handleLoadRecipes={handleLoadRecipes} />
+        <RecipeList
+          recipes={recipes}
+          loadMoreRecipes={() => loadMoreRecipes(nextRecipes)}
+          hasNextRecipes={nextRecipes.length > 0}
+        />
+        <img className={styles.edamamBadge} src="/edamam-badge.svg" />
+      </div>
     </>
   );
 }

@@ -10,7 +10,11 @@ export default function RecipeItem(props: Recipe) {
         <div className={styles.overlay}></div>
         <img className={styles.img} src={props.image} alt={props.label} />
         <div className={styles.text}>
-          <h2 className={styles.title}>{props.label}</h2>
+          <h2 className={styles.title}>
+            {props.label.length > 35
+              ? props.label.substring(0, 35).concat("...")
+              : props.label}
+          </h2>
           <ul className={styles.recipeDetails}>
             <li>{props.calories.toFixed(0)} calories</li>
             <li>|</li>
