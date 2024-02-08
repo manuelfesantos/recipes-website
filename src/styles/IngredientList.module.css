@@ -1,7 +1,6 @@
 .ingredients {
     width: var(--recipe-item-width);
     min-width: 30vw;
-    max-width: 90vw;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -24,3 +23,14 @@
     list-style-type: none;
 }
 
+@media screen and (max-width: 698px) {
+    .ingredients {
+        max-width: 90vw;
+    }
+}
+
+@media screen and (min-width: 2000px) {
+    .ingredients {
+        min-width: 20vw;
+    }
+}

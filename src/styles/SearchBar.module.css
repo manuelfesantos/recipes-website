@@ -35,7 +35,7 @@
 }
 
 .input:focus::placeholder {
-    color: var(--primary-light);
+    color: var(--secondary-light);
 }
 
 .btn {

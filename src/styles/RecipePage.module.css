@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     gap: 30px;
+    align-items: center;
     margin-top: 30px;
 }
 
@@ -14,14 +15,16 @@
     text-align: center;
     color: var(--secondary-light);
     font-weight: bolder;
+    max-width: 90vw;
+    font-size: 50px;
 }
 
 .img {
     width: var(--recipe-item-width);
     min-width: 30vw;
+    max-width: 50vw;
     top: 50px;
     left: 50px;
-    max-width: 90vw;
     margin: auto;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
@@ -52,6 +55,10 @@
 }
 
 @media screen and (max-width: 698px) {
+
+    .img {
+        max-width: 90vw;
+    }
     .links {
         flex-direction: column;
 
@@ -59,5 +66,20 @@
 
     .link {
         width: 100vw;
+    }
+
+    .title {
+        font-size: 40px;
+    }
+}
+
+@media screen and (min-width: 2000px) {
+    .img {
+        min-width: 20vw;
+    }
+
+    .title {
+        font-size: 50px;
+        max-width: 20vw;
     }
 }
