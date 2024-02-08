@@ -1,3 +1,21 @@
+export interface RecipeListResponse {
+  count: number;
+  from: number;
+  hits: RecipeItemWrapper[];
+  to: number;
+  _links: { next: Link };
+}
+
+export interface RecipeItemWrapper {
+  recipe: Recipe | RecipeDetails;
+  _links: { self: Link };
+}
+
+export interface Link {
+  href: string;
+  title: string;
+}
+
 export interface Recipe {
   calories: number;
   image: string;
@@ -24,17 +42,6 @@ export interface RecipeDetails extends Recipe {
   totalWeight: number;
   url: string;
   [keys: string]: any;
-}
-
-export interface RecipeListResponse {
-  count: number;
-  from: number;
-  hits: RecipeItemWrapper[];
-}
-
-export interface RecipeItemWrapper {
-  recipe: Recipe | RecipeDetails;
-  _links: { self: { href: string; title: string } };
 }
 
 export interface Digest {

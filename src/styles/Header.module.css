@@ -1,10 +1,11 @@
 .header {
     width: 70vw;
-    margin-left: 15vw;
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 10px;
+    color: var(--secondary-dark);
+    font-family: sans-serif ;
 }
 
 .title {

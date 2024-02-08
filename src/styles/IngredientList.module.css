@@ -1,21 +1,26 @@
 .ingredients {
     width: 30vw;
     min-width: 400px;
-    max-width: 900px;
-    margin: auto;
+    max-width: 90vw;
     display: flex;
     flex-direction: column;
     gap: 20px;
-    background-color: #d7b674;
     padding: 20px;
+    background-color: var(--secondary-light);
+    color: var(--primary-light);
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    margin: auto auto 30px;
 }
 
 .list {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    font-size: 20px;
 }
 
 .ingredients li {
     list-style-type: none;
 }
+

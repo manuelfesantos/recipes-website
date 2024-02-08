@@ -3,14 +3,14 @@
     max-width: 90vw;
     height: var(--recipe-item-height);
     border-radius: var(--border-radius);
-    background-color: #d7b674;
+    background-color: var(--secondary-dark);
+    color: var(--primary-light);
     display: flex;
     flex-direction: column;
     gap: 5px;
     margin: 0;
     padding-bottom: 30px;
     align-items: center;
-    box-shadow: 00px 10px 20px #2f2c27;
 }
 
 .title {

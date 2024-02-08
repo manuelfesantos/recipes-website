@@ -2,14 +2,20 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-family: sans-serif ;
 }
 
 body {
-    background-color: #abb5cc;
+    background-color: var(--primary-light);
 }
 
 :root {
-    --recipe-item-width: 400px;
-    --recipe-item-height: 500px;
+    --recipe-item-width: 300px;
+    --recipe-item-height: 400px;
     --border-radius: 10px;
+    --primary-light: #E8D8C4;
+    --primary-dark: #C7B7A3;
+    --secondary-light: #6D2932;
+    --secondary-dark: #561C24;
+
 }

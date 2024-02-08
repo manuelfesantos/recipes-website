@@ -5,6 +5,7 @@ import styles from "@/styles/RecipeList.module.css";
 interface Props {
   recipes: Recipe[];
 }
+
 export default function RecipeList({ recipes }: Props) {
   return (
     <div className={styles.recipeList}>

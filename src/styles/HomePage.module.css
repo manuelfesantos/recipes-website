@@ -1,0 +1,12 @@
+.homeDiv {
+    margin-top: 30px;
+    width: 70vw;
+    margin-left: 15vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.edamamBadge {
+    width: 300px;
+}
