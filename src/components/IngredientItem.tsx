@@ -6,11 +6,17 @@ interface Props {
 }
 
 export default function IngredientItem({ ingredient }: Props) {
+  const imageLoader = () => ingredient.image ?? "/ingredient-icon-6.jpg";
   return (
     <div className={styles.ingredientItem}>
-      <img
+      <Image
         className={styles.img}
-        src={ingredient.image}
+        loader={imageLoader}
+        width={100}
+        height={100}
+        placeholder={"blur"}
+        blurDataURL={"/Rolling-1s-460px.gif"}
+        src={ingredient.image ?? "/ingredient-icon-6.jpg"}
         alt={ingredient.text}
       />
       <p>{ingredient.text}</p>

@@ -10,6 +10,7 @@ import Head from "next/head";
 import Image from "next/image";
 
 export default function RecipePage(recipe: RecipeDetails) {
+  const imageLoader = () => recipe.image;
   return (
     <>
       <Head>
@@ -21,15 +22,24 @@ export default function RecipePage(recipe: RecipeDetails) {
       <div className={styles.recipeDiv}>
         <RecipeProfile title={recipe.label} image={recipe.image} />
         <div className={styles.recipeData}>
-          <img className={styles.img} alt={recipe.label} src={recipe.image} />
+          <Image
+            className={styles.img}
+            loader={imageLoader}
+            placeholder={"blur"}
+            width={300}
+            height={300}
+            blurDataURL={"/Rolling-1s-460px.gif"}
+            alt={recipe.label}
+            src={recipe.image}
+          />
           <IngredientList ingredients={recipe.ingredients} />
         </div>
         <div className={styles.links}>
-          <Link className={styles.link} href={".."}>
-            Back to Recipes
-          </Link>
           <Link className={styles.link} href={recipe.url} target="_blank">
             Check the preparation steps in {recipe.source}
+          </Link>
+          <Link className={styles.link} href={".."}>
+            Back to Recipes
           </Link>
         </div>
       </div>

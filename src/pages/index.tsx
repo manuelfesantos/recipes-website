@@ -9,7 +9,7 @@ import styles from "@/styles/HomePage.module.css";
 export default function HomePage() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [nextRecipes, setNextRecipes] = useState<string>("");
-  const handleLoadRecipes = async (searchText: string) => {
+  const loadRecipes = async (searchText: string) => {
     setNextRecipes("");
     const recipesList = await getRecipesBySearchWord(searchText);
     console.log(recipesList);
@@ -42,10 +42,15 @@ export default function HomePage() {
   const loadMoreRecipes = async (href: string) => {
     if (nextRecipes) {
       const newRecipeList = await getRecipesByHref(href);
-
+      if (newRecipeList._links.next) {
+        sessionStorage.setItem("next-recipes", newRecipeList._links.next.href);
+      }
       const newRecipes = newRecipeList.hits.map((hit) => hit.recipe);
-      setRecipes((prevState) => [...prevState, ...newRecipes]);
-
+      setRecipes((prevState) => {
+        const savedRecipes = [...prevState, ...newRecipes];
+        sessionStorage.setItem("recipes", JSON.stringify(savedRecipes));
+        return savedRecipes;
+      });
       const newRecipeLink = newRecipeList._links.next?.href;
       if (newRecipeLink) {
         setNextRecipes(newRecipeLink);
@@ -64,7 +69,7 @@ export default function HomePage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={styles.homeDiv}>
-        <Header handleLoadRecipes={handleLoadRecipes} />
+        <Header handleLoadRecipes={loadRecipes} />
         <RecipeList
           recipes={recipes}
           loadMoreRecipes={() => loadMoreRecipes(nextRecipes)}

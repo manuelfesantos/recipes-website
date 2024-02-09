@@ -4,11 +4,21 @@ import Link from "next/link";
 import styles from "@/styles/RecipeItem.module.css";
 
 export default function RecipeItem(props: Recipe) {
+  const imageLoader = () => props.image;
   return (
     <Link className={styles.link} href={`./recipe/${props.uri.slice(51)}`}>
       <div className={styles.recipeDiv}>
         <div className={styles.overlay}></div>
-        <img className={styles.img} src={props.image} alt={props.label} />
+        <Image
+          className={styles.img}
+          loader={imageLoader}
+          placeholder={"blur"}
+          blurDataURL={"/Rolling-1s-460px.gif"}
+          width={300}
+          height={400}
+          src={props.image}
+          alt={props.label}
+        />
         <div className={styles.text}>
           <h2 className={styles.title}>
             {props.label.length > 35
