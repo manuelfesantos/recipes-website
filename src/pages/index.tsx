@@ -1,10 +1,11 @@
 import Head from "next/head";
-import { UIEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Recipe } from "@/types/recipes";
 import RecipeList from "@/components/RecipeList";
 import Header from "@/components/Header";
 import { getRecipesByHref, getRecipesBySearchWord } from "@/util/api-client";
 import styles from "@/styles/HomePage.module.css";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export default function HomePage() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -68,20 +69,23 @@ export default function HomePage() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className={styles.homeDiv}>
-        <Header handleLoadRecipes={loadRecipes} />
-        <RecipeList
-          recipes={recipes}
-          loadMoreRecipes={() => loadMoreRecipes(nextRecipes)}
-          hasNextRecipes={nextRecipes.length > 0}
+      <InfiniteScroll
+        dataLength={recipes.length}
+        next={() => loadMoreRecipes(nextRecipes)}
+        hasMore={nextRecipes.length > 0}
+        loader={<h3> Loading...</h3>}
+      >
+        <div className={styles.homeDiv}>
+          <Header handleLoadRecipes={loadRecipes} />
+          <RecipeList recipes={recipes} />
+        </div>
+        <img
+          className={
+            recipes.length > 0 ? styles.edamamBadge : styles.edamamBadgeBottom
+          }
+          src="/edamam-badge.svg"
         />
-      </div>
-      <img
-        className={
-          recipes.length > 0 ? styles.edamamBadge : styles.edamamBadgeBottom
-        }
-        src="/edamam-badge.svg"
-      />
+      </InfiniteScroll>
     </>
   );
 }
