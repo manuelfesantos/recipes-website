@@ -33,7 +33,12 @@ export interface RecipeDetails extends Recipe {
   digest: Digest[];
   dishType: string[];
   healthLabels: string[];
-  images: { REGULAR: RecipeImage; SMALL: RecipeImage; THUMBNAIL: RecipeImage };
+  images: {
+    LARGE?: RecipeImage;
+    REGULAR?: RecipeImage;
+    SMALL?: RecipeImage;
+    THUMBNAIL?: RecipeImage;
+  };
   ingredients: Ingredient[];
   mealType: string[];
   shareAs: string;

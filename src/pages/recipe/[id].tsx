@@ -9,10 +9,17 @@ import RecipeProfile from "@/components/RecipeProfile";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export default function RecipePage(recipe: RecipeDetails) {
-  const imageLoader = () => recipe.image;
+  const images = recipe.images;
+
+  const image = images.LARGE?.url ?? recipe.image;
+  const imageLoader = () => image;
   const router = useRouter();
+  useEffect(() => {
+    console.log(recipe);
+  }, []);
   return (
     <>
       <Head>
@@ -32,7 +39,7 @@ export default function RecipePage(recipe: RecipeDetails) {
             height={300}
             blurDataURL={"/Rolling-1s-460px.gif"}
             alt={recipe.label}
-            src={recipe.image}
+            src={image}
           />
           <IngredientList ingredients={recipe.ingredients} />
         </div>
