@@ -8,9 +8,11 @@ import styles from "@/styles/RecipePage.module.css";
 import RecipeProfile from "@/components/RecipeProfile";
 import Head from "next/head";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 export default function RecipePage(recipe: RecipeDetails) {
   const imageLoader = () => recipe.image;
+  const router = useRouter();
   return (
     <>
       <Head>
@@ -38,7 +40,11 @@ export default function RecipePage(recipe: RecipeDetails) {
           <Link className={styles.link} href={recipe.url} target="_blank">
             Check the preparation steps in {recipe.source}
           </Link>
-          <Link className={styles.link} href={".."}>
+          <Link
+            className={styles.link}
+            href={`/#${router.query.id}`}
+            scroll={true}
+          >
             Back to Recipes
           </Link>
         </div>

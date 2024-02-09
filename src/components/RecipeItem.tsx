@@ -4,10 +4,11 @@ import Link from "next/link";
 import styles from "@/styles/RecipeItem.module.css";
 
 export default function RecipeItem(props: Recipe) {
+  const id = props.uri.slice(51);
   const imageLoader = () => props.image;
   return (
-    <Link className={styles.link} href={`./recipe/${props.uri.slice(51)}`}>
-      <div className={styles.recipeDiv}>
+    <Link className={styles.link} href={`./recipe/${id}`}>
+      <div id={id} className={styles.recipeDiv}>
         <div className={styles.overlay}></div>
         <Image
           className={styles.img}
