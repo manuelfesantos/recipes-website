@@ -2,10 +2,11 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import { Recipe } from "@/types/recipes";
 import RecipeList from "@/components/RecipeList";
-import Header from "@/components/Header";
+import SearchHeader from "@/components/SearchHeader";
 import { getRecipesByHref, getRecipesBySearchWord } from "@/util/api-client";
 import styles from "@/styles/HomePage.module.css";
 import InfiniteScroll from "react-infinite-scroll-component";
+import Link from "next/link";
 
 export default function HomePage() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -13,7 +14,6 @@ export default function HomePage() {
   const loadRecipes = async (searchText: string) => {
     setNextRecipes("");
     const recipesList = await getRecipesBySearchWord(searchText);
-    console.log(recipesList);
     const recipes = recipesList.hits.map((r) => r.recipe);
     if (recipes) {
       const nextRecipesLink = recipesList._links.next?.href;
@@ -26,7 +26,6 @@ export default function HomePage() {
       sessionStorage.setItem("search-text", searchText);
       sessionStorage.setItem("recipes", JSON.stringify(recipes));
       setRecipes(recipes);
-      console.log(recipes);
     }
   };
 
@@ -76,15 +75,17 @@ export default function HomePage() {
         loader={<h3> Loading...</h3>}
       >
         <div className={styles.homeDiv}>
-          <Header handleLoadRecipes={loadRecipes} />
+          <SearchHeader handleLoadRecipes={loadRecipes} />
           <RecipeList recipes={recipes} />
         </div>
-        <img
-          className={
-            recipes.length > 0 ? styles.edamamBadge : styles.edamamBadgeBottom
-          }
-          src="/edamam-badge.svg"
-        />
+        <Link href={"https://www.edamam.com/"} target={"_blank"}>
+          <img
+            className={
+              recipes.length > 0 ? styles.edamamBadge : styles.edamamBadgeBottom
+            }
+            src="/edamam-badge.svg"
+          />
+        </Link>
       </InfiniteScroll>
     </>
   );

@@ -1,4 +1,4 @@
-import { getSingleRecipe } from "@/util/api-client";
+import { getSingleRecipeById } from "@/util/api-client";
 import { RecipeDetails } from "@/types/recipes";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { encode } from "querystring";
@@ -17,9 +17,7 @@ export default function RecipePage(recipe: RecipeDetails) {
   const image = images.LARGE?.url ?? recipe.image;
   const imageLoader = () => image;
   const router = useRouter();
-  useEffect(() => {
-    console.log(recipe);
-  }, []);
+
   return (
     <>
       <Head>
@@ -64,7 +62,7 @@ export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext,
 ) => {
   const params = encode(context.query);
-  const wrappedRecipe = getSingleRecipe(params.slice(3));
+  const wrappedRecipe = getSingleRecipeById(params.slice(3));
   const recipe = (await wrappedRecipe).recipe as RecipeDetails;
   return {
     props: recipe,

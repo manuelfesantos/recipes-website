@@ -12,6 +12,7 @@
     padding-bottom: 30px;
     align-items: center;
     transition: background-color 100ms;
+    box-shadow: 0 0 20px 0 var(--secondary-dark-less-opacity);
 }
 
 .title {

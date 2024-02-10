@@ -17,5 +17,5 @@ body {
     --primary-dark: #C7B7A3;
     --secondary-light: #6D2932;
     --secondary-dark: #561C24;
-
+    --secondary-dark-less-opacity: rgba(86, 28, 36, 0.31);
 }

@@ -1,12 +1,12 @@
 import { Recipe } from "@/types/recipes";
 import SearchBar from "@/components/SearchBar";
-import styles from "@/styles/Header.module.css";
+import styles from "@/styles/SearchHeader.module.css";
 
 interface Props {
   handleLoadRecipes: (searchText: string) => void;
 }
 
-export default function Header({ handleLoadRecipes }: Props) {
+export default function SearchHeader({ handleLoadRecipes }: Props) {
   return (
     <div className={styles.header}>
       <h1 className={styles.title}>Recipes</h1>
