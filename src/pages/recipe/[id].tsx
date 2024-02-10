@@ -42,8 +42,12 @@ export default function RecipePage(recipe: RecipeDetails) {
           <IngredientList ingredients={recipe.ingredients} />
         </div>
         <div className={styles.links}>
-          <Link className={styles.link} href={recipe.url} target="_blank">
-            Check the preparation steps in {recipe.source}
+          <Link
+            className={styles.link}
+            href={"https://www.justtherecipe.com/?url=" + recipe.url}
+            target="_blank"
+          >
+            Get Preparation Steps
           </Link>
           <Link
             className={styles.link}
