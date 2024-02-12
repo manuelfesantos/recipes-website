@@ -1,4 +1,4 @@
-import { getSingleRecipeById } from "@/util/api-client";
+import { getSingleRecipeById } from "@/utils/api-client";
 import { RecipeDetails } from "@/types/recipes";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import { encode } from "querystring";

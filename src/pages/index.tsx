@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Recipe } from "@/types/recipes";
 import RecipeList from "@/components/RecipeList";
 import SearchHeader from "@/components/SearchHeader";
-import { getRecipesByHref, getRecipesBySearchWord } from "@/util/api-client";
+import { getRecipesByHref, getRecipesBySearchWord } from "@/utils/api-client";
 import styles from "@/styles/HomePage.module.css";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Link from "next/link";

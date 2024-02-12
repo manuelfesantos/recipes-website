@@ -1,4 +1,4 @@
-import { RecipeItemWrapper } from "@/types/recipes";
+import { RecipeDetails, RecipeItemWrapper, RecipeListResponse } from "@/types/recipes";
 import { AppConfig } from "@/types/app-config";
 
 const requestOptions: RequestInit = {
@@ -16,24 +16,24 @@ const appConfigs: AppConfig[] = [
 
 const baseEndpoint = "https://www.edamam.com/api/recipes/v2";
 
-export const getRecipesBySearchWord = async (searchWord: string) => {
+export const getRecipesBySearchWord = async (searchWord: string): Promise<RecipeListResponse> => {
   return getRecipesByHref(buildHrefFromSearchWord(searchWord));
 };
 
-export const getRecipesByHref = async (href: string) => {
+export const getRecipesByHref = async (href: string): Promise<RecipeListResponse> => {
   const appConfig: AppConfig = getAppConfigFromHref(href);
   const newHref = replaceAppConfigs(href, appConfig);
   console.log(`new href: ${newHref}`);
   const apiResponse = fetch(newHref, requestOptions);
-  return parseResponse(apiResponse);
+  return parseResponse(apiResponse) as Promise<RecipeListResponse>;
 };
 
-export const getSingleRecipeById = async (id: string) => {
+export const getSingleRecipeById = async (id: string): Promise<RecipeDetails> => {
   const apiResponse = fetch(buildHrefFromRecipeId(id), requestOptions);
-  return parseResponse(apiResponse);
+  return parseResponse(apiResponse) as Promise<RecipeDetails>;
 };
 
-const getRandomAppConfig = () =>
+const getRandomAppConfig = (): AppConfig =>
   appConfigs[Math.floor(Math.random() * appConfigs.length)];
 
 const buildHrefFromSearchWord = (searchWord: string) => {
@@ -43,7 +43,7 @@ const buildHrefFromSearchWord = (searchWord: string) => {
   return href;
 };
 
-const getAppConfigFromHref = (href: string) => {
+const getAppConfigFromHref = (href: string): AppConfig => {
   const query = href.split("?")[1];
   return {
     appId: findQueryParam(query, "app_id"),
@@ -51,14 +51,14 @@ const getAppConfigFromHref = (href: string) => {
   };
 };
 
-const replaceAppConfigs = (href: string, appConfig: AppConfig) => {
+const replaceAppConfigs = (href: string, appConfig: AppConfig): string => {
   const newAppConfig = getRandomAppConfig();
   return href
     .replace(appConfig.appId, newAppConfig.appId)
     .replace(appConfig.appKey, newAppConfig.appKey);
 };
 
-const findQueryParam = (query: string, paramTitle: string) => {
+const findQueryParam = (query: string, paramTitle: string): string => {
   return (
     query
       .split("&")
@@ -67,7 +67,7 @@ const findQueryParam = (query: string, paramTitle: string) => {
   );
 };
 
-const buildHrefFromRecipeId = (id: string) => {
+const buildHrefFromRecipeId = (id: string): string => {
   const appConfig = getRandomAppConfig();
   const href = `${baseEndpoint}/${id}?type=public&_=
 d2cd5dbf19e4e2e6d703b72b1203bc7f&app_id=${appConfig.appId}&app_key=${appConfig.appKey}`;
@@ -75,7 +75,7 @@ d2cd5dbf19e4e2e6d703b72b1203bc7f&app_id=${appConfig.appId}&app_key=${appConfig.a
   return href;
 };
 
-const parseResponse = async (response: Promise<Response>) => {
+const parseResponse = async (response: Promise<Response>): Promise<RecipeListResponse | RecipeDetails> => {
   const result = (await response).text();
   return JSON.parse(await result);
 };
