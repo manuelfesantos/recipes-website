@@ -1,0 +1,41 @@
+.header {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--secondary-dark);
+    color: var(--primary-light);
+
+}
+
+.navBar {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    list-style: none;
+}
+
+.navBar li {
+    height: 50%;
+    display: flex;
+    align-items: center;
+}
+
+.navBar a {
+    height: 100%;
+    width: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--primary-light);
+    border-radius: 5px;
+}
+
+
+.navBar a:hover {
+    background-color: var(--primary-light);
+    color: var(--secondary-light);
+}

@@ -7,6 +7,7 @@ import { getRecipesByHref, getRecipesBySearchWord } from "@/utils/api-client";
 import styles from "@/styles/HomePage.module.css";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Link from "next/link";
+import Header from "@/components/Header";
 
 export default function HomePage() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -68,6 +69,7 @@ export default function HomePage() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Header />
       <InfiniteScroll
         dataLength={recipes.length}
         next={() => loadMoreRecipes(nextRecipes)}

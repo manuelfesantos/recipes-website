@@ -10,6 +10,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import Header from "@/components/Header";
 
 export default function RecipePage(recipe: RecipeDetails) {
   const images = recipe.images;
@@ -26,6 +27,7 @@ export default function RecipePage(recipe: RecipeDetails) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <Header />
       <div className={styles.recipeDiv}>
         <RecipeProfile title={recipe.label} image={recipe.image} />
         <div className={styles.recipeData}>
