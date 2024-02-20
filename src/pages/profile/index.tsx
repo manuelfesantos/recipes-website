@@ -1,7 +1,9 @@
 import Head from "next/head";
 import Header from "@/components/Header";
+import { run } from "@/utils/mongo-db/db-client";
+import { GetServerSideProps } from "next";
 
-export default function ProfilePage() {
+export default function ProfilePage(text: string) {
   return (
     <>
       <Head>
@@ -11,6 +13,16 @@ export default function ProfilePage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
+      <button onClick={() => console.log(text)}></button>
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  await run();
+  return {
+    props: {
+      text: "olá",
+    },
+  };
+};

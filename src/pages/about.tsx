@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Header from "@/components/Header";
+import styles from "@/styles/About.module.css";
 
 export default function About() {
   return (
@@ -11,6 +12,7 @@ export default function About() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
+      <div className={styles.aboutDiv}></div>
     </>
   );
 }
