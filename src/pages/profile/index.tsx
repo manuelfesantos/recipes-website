@@ -2,7 +2,6 @@ import Head from "next/head";
 import Header from "@/components/Header";
 import { User, UserList } from "@/types/user";
 import { useEffect, useRef, useState } from "react";
-import { GetServerSideProps } from "next";
 
 export default function ProfilePage() {
   const username = useRef<HTMLInputElement>(null);
@@ -23,7 +22,7 @@ export default function ProfilePage() {
 
   useEffect(() => {
     getUsers();
-  }, [users]);
+  }, []);
   const handleSaveUser = async () => {
     if (username.current && password.current) {
       const saveUsername = username.current.value;
@@ -81,6 +80,25 @@ export default function ProfilePage() {
     });
     toggleUpdatingUser(user);
     await getUsers();
+  };
+
+  const [image, setImage] = useState<File | null>(null);
+
+  const handleChange = (files: FileList | null) => {
+    if (files) {
+      setImage(files[0]);
+    }
+  };
+
+  const handleSendImage = async () => {
+    if (image) {
+      const formData = new FormData();
+      formData.append("picture", image);
+      const response = await fetch("api/pictures", {
+        method: "PUT",
+        body: formData,
+      });
+    }
   };
 
   return (
@@ -141,6 +159,13 @@ export default function ProfilePage() {
           )}
         </div>
       ))}
+      <input
+        type={"file"}
+        onChange={(event) => handleChange(event.target.files)}
+      />
+      <button type={"button"} onClick={handleSendImage}>
+        Send Image
+      </button>
     </>
   );
 }

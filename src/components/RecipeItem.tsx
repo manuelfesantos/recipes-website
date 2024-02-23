@@ -2,7 +2,6 @@ import { Recipe } from "@/types/recipes";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "@/styles/RecipeItem.module.css";
-import { useState } from "react";
 
 export default function RecipeItem(props: Recipe) {
   const imageLoader = () => props.image;

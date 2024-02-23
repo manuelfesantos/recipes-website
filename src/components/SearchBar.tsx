@@ -1,6 +1,4 @@
-import { Recipe } from "@/types/recipes";
 import { useEffect, useRef } from "react";
-import { getRecipesBySearchWord } from "@/utils/api-client";
 import styles from "@/styles/SearchBar.module.css";
 interface Props {
   loadRecipes: (searchText: string) => void;

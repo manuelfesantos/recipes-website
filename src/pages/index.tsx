@@ -1,9 +1,8 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import { Recipe } from "@/types/recipes";
+import { Recipe, RecipeListResponse } from "@/types/recipes";
 import RecipeList from "@/components/RecipeList";
 import SearchHeader from "@/components/SearchHeader";
-import { getRecipesByHref, getRecipesBySearchWord } from "@/utils/api-client";
 import styles from "@/styles/HomePage.module.css";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Link from "next/link";
@@ -14,19 +13,23 @@ export default function HomePage() {
   const [nextRecipes, setNextRecipes] = useState<string>("");
   const loadRecipes = async (searchText: string) => {
     setNextRecipes("");
-    const recipesList = await getRecipesBySearchWord(searchText);
-    const recipes = recipesList.hits.map((r) => r.recipe);
-    if (recipes) {
-      const nextRecipesLink = recipesList._links.next?.href;
+    const responsePromise = await fetch(`/api/recipes/${searchText}`);
+    const response = await responsePromise.json();
+    if (response.status === 200) {
+      const recipesList = response.recipes as RecipeListResponse;
+      const recipes = recipesList.hits.map((r) => r.recipe);
+      if (recipes) {
+        const nextRecipesLink = recipesList._links.next?.href;
 
-      if (nextRecipesLink) {
-        sessionStorage.setItem("next-recipes", nextRecipesLink);
-        setNextRecipes(nextRecipesLink);
+        if (nextRecipesLink) {
+          sessionStorage.setItem("next-recipes", nextRecipesLink);
+          setNextRecipes(nextRecipesLink);
+        }
+
+        sessionStorage.setItem("search-text", searchText);
+        sessionStorage.setItem("recipes", JSON.stringify(recipes));
+        setRecipes(recipes);
       }
-
-      sessionStorage.setItem("search-text", searchText);
-      sessionStorage.setItem("recipes", JSON.stringify(recipes));
-      setRecipes(recipes);
     }
   };
 
@@ -41,22 +44,34 @@ export default function HomePage() {
     }
   }, []);
   const loadMoreRecipes = async (href: string) => {
-    if (nextRecipes) {
-      const newRecipeList = await getRecipesByHref(href);
-      if (newRecipeList._links.next) {
-        sessionStorage.setItem("next-recipes", newRecipeList._links.next.href);
-      }
-      const newRecipes = newRecipeList.hits.map((hit) => hit.recipe);
-      setRecipes((prevState) => {
-        const savedRecipes = [...prevState, ...newRecipes];
-        sessionStorage.setItem("recipes", JSON.stringify(savedRecipes));
-        return savedRecipes;
+    if (href) {
+      const headers = new Headers();
+      headers.append("href", href);
+      const responsePromise = await fetch(`/api/recipes/next`, {
+        headers: headers,
       });
-      const newRecipeLink = newRecipeList._links.next?.href;
-      if (newRecipeLink) {
-        setNextRecipes(newRecipeLink);
-      } else {
-        setNextRecipes("");
+      const response = await responsePromise.json();
+      console.log(response);
+      if (response.status === 200) {
+        const newRecipeList = response.recipes as RecipeListResponse;
+        if (newRecipeList._links.next) {
+          sessionStorage.setItem(
+            "next-recipes",
+            newRecipeList._links.next.href,
+          );
+        }
+        const newRecipes = newRecipeList.hits.map((hit) => hit.recipe);
+        setRecipes((prevState) => {
+          const savedRecipes = [...prevState, ...newRecipes];
+          sessionStorage.setItem("recipes", JSON.stringify(savedRecipes));
+          return savedRecipes;
+        });
+        const newRecipeLink = newRecipeList._links.next?.href;
+        if (newRecipeLink) {
+          setNextRecipes(newRecipeLink);
+        } else {
+          setNextRecipes("");
+        }
       }
     }
   };

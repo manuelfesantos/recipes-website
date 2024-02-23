@@ -1,4 +1,3 @@
-import { Recipe } from "@/types/recipes";
 import SearchBar from "@/components/SearchBar";
 import styles from "@/styles/SearchHeader.module.css";
 

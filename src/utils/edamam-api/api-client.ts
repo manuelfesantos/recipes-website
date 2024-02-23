@@ -1,26 +1,33 @@
-import { RecipeDetails, RecipeItemWrapper, RecipeListResponse } from "@/types/recipes";
+import { RecipeDetails, RecipeListResponse } from "@/types/recipes";
 import { AppConfig } from "@/types/app-config";
+import process from "process";
 
 const requestOptions: RequestInit = {
   method: "GET",
   redirect: "follow",
 };
 
+const env = process.env;
+
 const appConfigs: AppConfig[] = [
-  { appId: "bc78b6ba", appKey: "d2cd5dbf19e4e2e6d703b72b1203bc7f" },
-  { appId: "48d1a496", appKey: "20e7f3ef09443ba504793a71e1f6ec31" },
-  { appId: "7814c164", appKey: "11deeae5c25b3d8b217c8620dd3ea712" },
-  { appId: "237fcaca", appKey: "3f25aec551cb19df198259a90c15c775" },
-  { appId: "3761ecf9", appKey: "b689da2e119484754301272bb4a069db" },
+  { appId: `${env.RECIPES_APP_ID_1}`, appKey: `${env.RECIPES_APP_KEY_1}` },
+  { appId: `${env.RECIPES_APP_ID_2}`, appKey: `${env.RECIPES_APP_KEY_2}` },
+  { appId: `${env.RECIPES_APP_ID_3}`, appKey: `${env.RECIPES_APP_KEY_3}` },
+  { appId: `${env.RECIPES_APP_ID_4}`, appKey: `${env.RECIPES_APP_KEY_4}` },
+  { appId: `${env.RECIPES_APP_ID_5}`, appKey: `${env.RECIPES_APP_KEY_5}` },
 ];
 
 const baseEndpoint = "https://www.edamam.com/api/recipes/v2";
 
-export const getRecipesBySearchWord = async (searchWord: string): Promise<RecipeListResponse> => {
+export const getRecipesBySearchWord = async (
+  searchWord: string,
+): Promise<RecipeListResponse> => {
   return getRecipesByHref(buildHrefFromSearchWord(searchWord));
 };
 
-export const getRecipesByHref = async (href: string): Promise<RecipeListResponse> => {
+export const getRecipesByHref = async (
+  href: string,
+): Promise<RecipeListResponse> => {
   const appConfig: AppConfig = getAppConfigFromHref(href);
   const newHref = replaceAppConfigs(href, appConfig);
   console.log(`new href: ${newHref}`);
@@ -28,7 +35,9 @@ export const getRecipesByHref = async (href: string): Promise<RecipeListResponse
   return parseResponse(apiResponse) as Promise<RecipeListResponse>;
 };
 
-export const getSingleRecipeById = async (id: string): Promise<RecipeDetails> => {
+export const getSingleRecipeById = async (
+  id: string,
+): Promise<RecipeDetails> => {
   const apiResponse = fetch(buildHrefFromRecipeId(id), requestOptions);
   return parseResponse(apiResponse) as Promise<RecipeDetails>;
 };
@@ -75,7 +84,9 @@ d2cd5dbf19e4e2e6d703b72b1203bc7f&app_id=${appConfig.appId}&app_key=${appConfig.a
   return href;
 };
 
-const parseResponse = async (response: Promise<Response>): Promise<RecipeListResponse | RecipeDetails> => {
+const parseResponse = async (
+  response: Promise<Response>,
+): Promise<RecipeListResponse | RecipeDetails> => {
   const result = (await response).text();
   return JSON.parse(await result);
 };
