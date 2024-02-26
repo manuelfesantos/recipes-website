@@ -4,21 +4,25 @@ import styles from "@/styles/RecipeList.module.css";
 
 interface Props {
   recipes: Recipe[];
+  isLoggedIn: boolean;
 }
 
-export default function RecipeList({ recipes }: Props) {
+export default function RecipeList({ recipes, isLoggedIn }: Props) {
   return (
     <div className={styles.recipeList}>
       {recipes.map((recipe) => (
         <RecipeItem
-          calories={recipe.calories}
-          image={recipe.image}
-          ingredientLines={recipe.ingredientLines}
-          label={recipe.label}
-          source={recipe.source}
-          uri={recipe.uri}
-          yield={recipe.yield}
+          recipe={{
+            calories: recipe.calories,
+            image: recipe.image,
+            ingredientLines: recipe.ingredientLines,
+            label: recipe.label,
+            source: recipe.source,
+            uri: recipe.uri,
+            yield: recipe.yield,
+          }}
           key={recipe.uri.slice(51)}
+          isLoggedIn={isLoggedIn}
         />
       ))}
     </div>

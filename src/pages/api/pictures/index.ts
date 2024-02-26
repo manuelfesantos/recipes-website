@@ -16,14 +16,20 @@ router.put(async (req, res) => {
   });
   const headers = new Headers();
 
-  const response = await fetch(url, {
+  await fetch(url, {
     method: "PUT",
     body: req.file.buffer,
     headers: headers,
   });
-  res.json(response.status);
 
-  res.status(200).json({ message: "Image uploaded successfully" });
+  const fileNameArray = req.file.originalname.split(".");
+  fileNameArray.pop();
+  const fileName = fileNameArray.join("");
+
+  res.json({
+    status: 200,
+    message: `${fileName} uploaded successfully`,
+  });
 });
 
 export default router.handler();

@@ -7,10 +7,12 @@ import styles from "@/styles/HomePage.module.css";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Link from "next/link";
 import Header from "@/components/Header";
+import { getCookie } from "cookies-next";
 
 export default function HomePage() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [nextRecipes, setNextRecipes] = useState<string>("");
+  const [isLoggedIn] = useState<boolean>(Boolean(getCookie("user")));
   const loadRecipes = async (searchText: string) => {
     setNextRecipes("");
     const responsePromise = await fetch(`/api/recipes/${searchText}`);
@@ -93,7 +95,8 @@ export default function HomePage() {
       >
         <div className={styles.homeDiv}>
           <SearchHeader handleLoadRecipes={loadRecipes} />
-          <RecipeList recipes={recipes} />
+          {!isLoggedIn && <h1>Login to add recipes to your favorites</h1>}
+          <RecipeList recipes={recipes} isLoggedIn={isLoggedIn} />
         </div>
         <Link href={"https://www.edamam.com/"} target={"_blank"}>
           <img

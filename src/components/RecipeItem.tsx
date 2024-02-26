@@ -3,11 +3,16 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "@/styles/RecipeItem.module.css";
 
-export default function RecipeItem(props: Recipe) {
-  const imageLoader = () => props.image;
+interface Props {
+  recipe: Recipe;
+  isLoggedIn: boolean;
+}
+
+export default function RecipeItem({ recipe, isLoggedIn }: Props) {
+  const imageLoader = () => recipe.image;
   return (
-    <Link className={styles.link} href={`./recipe/${props.uri.slice(51)}`}>
-      <div id={props.uri.slice(51)} className={styles.recipeDiv}>
+    <Link className={styles.link} href={`./recipe/${recipe.uri.slice(51)}`}>
+      <div id={recipe.uri.slice(51)} className={styles.recipeDiv}>
         <div className={styles.overlay}></div>
         <Image
           className={styles.img}
@@ -16,20 +21,21 @@ export default function RecipeItem(props: Recipe) {
           blurDataURL={"/Rolling-1s-460px.gif"}
           width={300}
           height={400}
-          src={props.image}
-          alt={props.label}
+          src={recipe.image}
+          alt={recipe.label}
         />
         <div className={styles.text}>
           <h2 className={styles.title}>
-            {props.label.length > 35
-              ? props.label.substring(0, 35).concat("...")
-              : props.label}
+            {recipe.label.length > 35
+              ? recipe.label.substring(0, 35).concat("...")
+              : recipe.label}
           </h2>
           <ul className={styles.recipeDetails}>
-            <li>{props.calories.toFixed(0)} calories</li>
+            <li>{recipe.calories.toFixed(0)} calories</li>
             <li>|</li>
-            <li>{props.ingredientLines.length} ingredients</li>
+            <li>{recipe.ingredientLines.length} ingredients</li>
           </ul>
+          {isLoggedIn && <h3>Add to favorites</h3>}
         </div>
       </div>
     </Link>

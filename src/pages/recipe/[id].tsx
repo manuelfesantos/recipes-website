@@ -10,8 +10,15 @@ import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Header from "@/components/Header";
+import { User } from "@/types/user";
 
-export default function RecipePage(recipe: RecipeDetails) {
+export default function RecipePage({
+  recipe,
+  user,
+}: {
+  recipe: RecipeDetails;
+  user: User | null;
+}) {
   const images = recipe.images;
 
   const image = images.LARGE?.url ?? recipe.image;
@@ -57,19 +64,25 @@ export default function RecipePage(recipe: RecipeDetails) {
           >
             Back to Recipes
           </Link>
+          {user && <button className={styles.link}>Add to Favorites</button>}
         </div>
       </div>
     </>
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetServerSidePropsContext,
-) => {
-  const params = encode(context.query);
+export const getServerSideProps: GetServerSideProps = async ({
+  query,
+  req,
+}: GetServerSidePropsContext) => {
+  const params = encode(query);
   const wrappedRecipe = getSingleRecipeById(params.slice(3));
   const recipe = (await wrappedRecipe).recipe as RecipeDetails;
+
+  const user = req.cookies.user;
+  const parsedUser = JSON.parse(user ?? "{}");
+  const userResponse = Object.keys(parsedUser).length ? parsedUser : null;
   return {
-    props: recipe,
+    props: { recipe, user: userResponse },
   };
 };
