@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
+import { setCookie } from "cookies-next";
 
 interface Props {
   recipe: Recipe;
@@ -28,6 +29,7 @@ export default function RecipeItem({
   const addFavorite = async () => {
     if (user) {
       setFavorite(true);
+      saveCurrentRecipe();
       await addToFavorites(recipe);
     }
   };
@@ -43,6 +45,10 @@ export default function RecipeItem({
     if (user && user.recipes)
       return user.recipes.some((userRecipe) => userRecipe.uri === recipe.uri);
     else return false;
+  };
+
+  const saveCurrentRecipe = () => {
+    sessionStorage.setItem("currentRecipe", recipe.uri.slice(51));
   };
 
   useEffect(() => {
@@ -85,16 +91,19 @@ export default function RecipeItem({
           </div>
         </div>
       </Link>
-      <div className={styles.favorite}>
+      <div className={`${styles.favorite} `}>
         <FontAwesomeIcon
+          className={`${styles.favoriteBtn} ${isFavorite ? styles.isFavorite : styles.isNotFavorite}`}
           icon={faHeart}
-          style={isFavorite ? { color: "red" } : { color: "black" }}
           onClick={
             user
               ? isFavorite
                 ? removeFavorite
                 : addFavorite
-              : async () => await router.push("/signup")
+              : async () => {
+                  saveCurrentRecipe();
+                  await router.push("/login");
+                }
           }
         />
       </div>

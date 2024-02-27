@@ -105,16 +105,15 @@ export default function RecipePage({
           >
             Get Preparation Steps
           </Link>
+          <FavoritesButton
+            handleAddToFavorites={handleAddToFavorites}
+            handleRemoveFromFavorites={handleRemoveFromFavorites}
+            favorite={isFavorite()}
+            isLoggedIn={Boolean(user)}
+          />
           <button className={styles.link} onClick={() => router.back()}>
             Back to Recipes
           </button>
-          {user && (
-            <FavoritesButton
-              handleAddToFavorites={handleAddToFavorites}
-              handleRemoveFromFavorites={handleRemoveFromFavorites}
-              favorite={isFavorite()}
-            />
-          )}
         </div>
       </div>
     </>
@@ -129,7 +128,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   const wrappedRecipe = getSingleRecipeById(params.slice(3));
   const recipe = (await wrappedRecipe).recipe as RecipeDetails;
 
-  const userId = req.cookies.user;
+  const { user: userId } = req.cookies;
   if (!userId) {
     return {
       props: {

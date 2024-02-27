@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
 import { Recipe, RecipeListResponse } from "@/types/recipes";
-import Head from "next/head";
-import Header from "@/components/Header";
 import InfiniteScroll from "react-infinite-scroll-component";
 import styles from "@/styles/HomePage.module.css";
 import SearchHeader from "@/components/SearchHeader";
 import RecipeList from "@/components/RecipeList";
 import Link from "next/link";
 import { UserDTO } from "@/types/user";
-import { useRouter } from "next/router";
 
 interface Props {
   user: UserDTO | null;
@@ -127,7 +124,11 @@ export default function RecipeMain({ user }: Props) {
       if (id) {
         const target = document.getElementById(`${id}`);
         if (target) {
-          target.scrollIntoView();
+          target.scrollIntoView({
+            behavior: "auto",
+            block: "center",
+            inline: "center",
+          });
         }
       }
       setLoaded(true);
@@ -144,7 +145,7 @@ export default function RecipeMain({ user }: Props) {
       >
         <div className={styles.homeDiv}>
           <SearchHeader handleLoadRecipes={loadRecipes} />
-          {!user && <h1>Login to add recipes to your favorites</h1>}
+          {!userDTO && <p>Login to add recipes to your favorites</p>}
           <RecipeList
             recipes={recipes}
             user={userDTO}

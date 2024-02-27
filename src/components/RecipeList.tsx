@@ -17,9 +17,7 @@ export default function RecipeList({
   handleRemoveFavorite,
   handleAddFavorite,
 }: Props) {
-  useEffect(() => {
-    console.log(user);
-  }, []);
+  useEffect(() => {}, []);
   return (
     <div className={styles.recipeList}>
       {recipes.map((recipe) => (

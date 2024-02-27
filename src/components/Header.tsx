@@ -33,7 +33,7 @@ export default function Header() {
           </li>
         ) : (
           <li>
-            <Link href={"/signup"}>Signup</Link>
+            <Link href={"/login"}>Login</Link>
           </li>
         )}
       </ul>

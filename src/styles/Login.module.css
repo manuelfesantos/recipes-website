@@ -1,0 +1,111 @@
+.loginDiv {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-light);
+    background-image: url("/desktop-1920x1080.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.loginForm {
+    position: relative;
+    width: 600px;
+    max-width: 90vw;
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    background-color: var(--secondary-dark);
+    border-radius: 20px;
+}
+
+.formField {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.title {
+    font-size: 70px;
+}
+
+.formField input {
+    width: 300px;
+    max-width: 90%;
+    height: 30px;
+    border: 0;
+    border-radius: 10px;
+    background-color: var(--primary-light);
+}
+
+.loginDiv button {
+    width: 150px;
+    height: 30px;
+    border: 0;
+    border-radius: 10px;
+    background-color: var(--primary-light);
+    color: var(--secondary-dark);
+    cursor: pointer;
+}
+
+.loginDiv button:hover {
+    background-color: var(--secondary-light);
+    color: var(--primary-light);
+}
+
+.loginDiv button:active {
+    background-color: var(--secondary-dark);
+    color: var(--primary-dark);
+}
+
+.loginDiv h3 {
+    cursor: pointer;
+}
+
+.loginDiv h3:hover {
+    color: var(--primary-dark);
+}
+
+.input {
+    text-align: center;
+    color: var(--secondary-dark);
+}
+
+.input::placeholder {
+    color: var(--secondary-dark);
+    opacity: 1;
+}
+
+.input:focus {
+    outline: none;
+    background-color: var(--secondary-light);
+    color: var(--primary-light);
+}
+
+.input:focus::placeholder {
+    color: var(--secondary-light);
+}
+
+
+.options {
+    display: flex;
+    gap: 30px;
+}
+
+.loginMessage {
+    position: absolute;
+    bottom: 120px;
+}
+
+.signupMessage {
+    position: absolute;
+    bottom: 70px;
+}

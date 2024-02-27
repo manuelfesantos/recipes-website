@@ -1,13 +1,17 @@
 .recipeList {
-    width: 100%;
+    width: auto;
     margin-left: 0;
     margin-top: 10vh;
     display: flex;
-    gap: 30px 10px;
+    justify-content: center;
+    gap: 20px 10px;
     flex-wrap: wrap;
-    justify-content: space-evenly;
     margin-bottom: 50px;
 }
+
+.recipeList > * {
+}
+
 
 .btn {
     background-color: var(--secondary-light);
@@ -29,4 +33,14 @@
 
 .btn:active {
     background-color: var(--primary-light);
+}
+
+@media screen and (max-width: 677px) {
+    .recipeList {
+        justify-content: center;
+    }
+
+    .recipeList > * {
+        flex: 0;
+    }
 }

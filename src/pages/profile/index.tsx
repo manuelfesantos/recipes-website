@@ -45,11 +45,11 @@ export default function ProfilePage({ user }: { user: UserDTO | null }) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  const userId = req.cookies.user;
+  const { user: userId } = req.cookies;
   if (!userId) {
     return {
       redirect: {
-        destination: "/signup",
+        destination: "/login",
         permanent: false,
       },
     };
@@ -60,7 +60,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   if (!user) {
     return {
       redirect: {
-        destination: "/signup",
+        destination: "/login",
         permanent: false,
       },
     };

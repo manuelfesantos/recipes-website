@@ -1,5 +1,7 @@
 .recipeCard {
     position: relative;
+    width: var(--recipe-item-width);
+
 }
 
 .recipeDiv {
@@ -85,4 +87,28 @@
     left: 20px;
     z-index: 99;
     font-size: 30px;
+}
+
+.isFavorite {
+    color: red;
+}
+
+.isFavorite:hover {
+    color: #ff4d00;
+}
+
+.isNotFavorite {
+color: black;
+}
+
+.isNotFavorite:hover {
+    color: #494949;
+}
+
+.favoriteBtn {
+    cursor: pointer;
+}
+
+.favoriteBtn:active {
+    color: #ffdd00;
 }

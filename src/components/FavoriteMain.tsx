@@ -2,6 +2,7 @@ import RecipeList from "@/components/RecipeList";
 import { useEffect, useState } from "react";
 import { Recipe } from "@/types/recipes";
 import { UserDTO } from "@/types/user";
+import styles from "@/styles/FavoriteMain.module.css";
 
 interface Props {
   user: UserDTO;
@@ -48,20 +49,26 @@ export default function FavoriteMain({ user }: Props) {
     if (currentRecipe) {
       const target = document.getElementById(currentRecipe);
       if (target) {
-        target.scrollIntoView();
+        target.scrollIntoView({
+          behavior: "auto",
+          block: "center",
+          inline: "center",
+        });
       }
     }
   }, []);
 
   return (
     <>
-      <h1>{user.username}</h1>
-      <RecipeList
-        recipes={recipes}
-        user={user}
-        handleAddFavorite={handleAddToFavorites}
-        handleRemoveFavorite={handleRemoveFromFavorites}
-      />
+      <h1 className={styles.title}>{`${user.username}'s Favorite recipes`}</h1>
+      <div className={styles.favoriteDiv}>
+        <RecipeList
+          recipes={recipes}
+          user={user}
+          handleAddFavorite={handleAddToFavorites}
+          handleRemoveFavorite={handleRemoveFromFavorites}
+        />
+      </div>
     </>
   );
 }

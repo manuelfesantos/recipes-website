@@ -1,21 +1,22 @@
 import Head from "next/head";
 import Header from "@/components/Header";
 import { useRef } from "react";
-import { User, UserCredentials } from "@/types/user";
-import { toast, Toaster } from "react-hot-toast";
+import { UserCredentials } from "@/types/user";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next";
 import { setCookie } from "cookies-next";
 import styles from "@/styles/Login.module.css";
-import SignupForm from "@/components/SignupForm";
+import LoginForm from "@/components/LoginForm";
 
-export default function Signup() {
-  const handleSignup = async (user: User) => {
+export default function Login() {
+  const handleLogin = async (
+    credentials: UserCredentials,
+  ): Promise<Response> => {
     const headers = new Headers();
-    headers.append("action", "signup");
-    return await fetch("/api/users", {
+    headers.append("action", "login");
+    return await fetch(`/api/users`, {
       method: "POST",
-      body: JSON.stringify(user),
+      body: JSON.stringify(credentials),
       headers: headers,
     });
   };
@@ -30,7 +31,7 @@ export default function Signup() {
       </Head>
       <Header />
       <div className={styles.loginDiv}>
-        <SignupForm handleSignup={handleSignup} />
+        <LoginForm handleLogin={handleLogin} />
       </div>
     </>
   );

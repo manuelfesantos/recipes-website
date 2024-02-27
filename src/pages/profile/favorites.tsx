@@ -23,15 +23,15 @@ export default function Favorites({ user }: { user: UserDTO }) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const userId = req.cookies.user;
+  const { user: userId } = req.cookies;
   if (!userId) {
-    return { redirect: { destination: "/signup", permanent: false } };
+    return { redirect: { destination: "/login", permanent: false } };
   }
   const collection = await getCollection();
 
   const user = await collection.findOne({ _id: new ObjectId(userId) });
   if (!user) {
-    return { redirect: { destination: "/signup", permanent: false } };
+    return { redirect: { destination: "/login", permanent: false } };
   }
   return {
     props: {

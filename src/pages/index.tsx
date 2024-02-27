@@ -23,7 +23,7 @@ export default function HomePage({ user }: { user: UserDTO | null }) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const userId = req.cookies.user;
+  const { user: userId } = req.cookies;
   if (!userId) {
     return {
       props: {

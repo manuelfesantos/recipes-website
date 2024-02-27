@@ -1,0 +1,16 @@
+.favoriteDiv {
+    width: 80vw;
+    margin-left: 10vw;
+    display: flex;
+    justify-content: center;
+}
+
+.title {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    color: var(--secondary-dark);
+    width: 90vw;
+    margin-left: 5vw;
+}
