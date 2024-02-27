@@ -2,16 +2,20 @@ import Head from "next/head";
 import Header from "@/components/Header";
 import { Toaster } from "react-hot-toast";
 import { useRouter } from "next/router";
-import { User } from "@/types/user";
+import { UserDTO } from "@/types/user";
 import { GetServerSideProps } from "next";
 import { deleteCookie } from "cookies-next";
+import { getCollection } from "@/utils/mongo-db/db-client";
+import { ObjectId } from "mongodb";
+import { buildUserDTOFromDocument } from "@/utils/transformer/documentToDTO";
+import Link from "next/link";
 
-export default function ProfilePage({ user }: { user: User | null }) {
+export default function ProfilePage({ user }: { user: UserDTO | null }) {
   //TODO Implement cookies for state management
   const router = useRouter();
   const handleLogout = async () => {
     deleteCookie("user");
-    await router.push("/signup");
+    await router.push("/");
   };
 
   return (
@@ -28,19 +32,21 @@ export default function ProfilePage({ user }: { user: User | null }) {
       </div>
       <div>
         <h1>{user?.username}</h1>
-        <h2>{user?.password}</h2>
       </div>
+      <Link
+        onClick={() => sessionStorage.removeItem("currentRecipe")}
+        href={"/profile/favorites"}
+      >
+        Favorites
+      </Link>
       <button onClick={handleLogout}>Logout</button>
     </>
   );
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  const user = req.cookies.user;
-  if (user) {
-    const parsedUser = JSON.parse(user);
-    return { props: { user: parsedUser } };
-  } else {
+  const userId = req.cookies.user;
+  if (!userId) {
     return {
       redirect: {
         destination: "/signup",
@@ -48,4 +54,16 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       },
     };
   }
+  const collection = await getCollection();
+  const user = await collection.findOne({ _id: new ObjectId(userId) });
+
+  if (!user) {
+    return {
+      redirect: {
+        destination: "/signup",
+        permanent: false,
+      },
+    };
+  }
+  return { props: { user: buildUserDTOFromDocument(user) } };
 };

@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getCollection } from "@/utils/mongo-db/db-client";
 import { ObjectId } from "mongodb";
-import { User } from "@/types/user";
+import { User, UserDTO } from "@/types/user";
 
 export default async function handler(
   req: NextApiRequest,
@@ -22,27 +22,52 @@ export default async function handler(
       break;
     case "GET":
       const getResult = await collection.findOne({ _id: new ObjectId(id) });
-      getResult
-        ? res.json({ status: 200, user: JSON.stringify(getResult) })
-        : res.json({ status: 404 });
+
+      if (!getResult) {
+        res.json({ status: 404 });
+        return;
+      }
+      const getUserDTO: UserDTO = {
+        username: getResult.username,
+        recipes: getResult.recipes,
+        _id: `${getResult._id}`,
+      };
+      res.json({ status: 200, user: JSON.stringify(getUserDTO) });
+
       break;
     case "PUT":
-      const putParsedBody: User = JSON.parse(req.body ?? "");
+      const putParsedBody: UserDTO = JSON.parse(req.body ?? "");
       const putResult = await collection.updateOne(
         { _id: new ObjectId(id) },
         {
           $set: {
             username: putParsedBody.username,
-            password: putParsedBody.password,
+            recipes: putParsedBody.recipes,
           },
         },
       );
-      putResult.matchedCount
-        ? res.json({
-            status: 202,
-            user: await collection.findOne({ _id: new ObjectId(id) }),
-          })
-        : res.json({ status: 404, user: {} });
+      if (!putResult.matchedCount) {
+        res.json({ status: 404, user: {} });
+        return;
+      }
+
+      const putUser = await collection.findOne({ _id: new ObjectId(id) });
+
+      if (!putUser) {
+        res.json({ status: 500 });
+        return;
+      }
+
+      const putUserDTO: UserDTO = {
+        username: putUser.username,
+        recipes: putUser.recipes,
+        _id: `${putUser._id}`,
+      };
+
+      res.json({
+        status: 202,
+        user: putUserDTO,
+      });
       break;
   }
 }

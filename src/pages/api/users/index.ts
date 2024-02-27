@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getCollection } from "@/utils/mongo-db/db-client";
+import { UserDTO } from "@/types/user";
 
 export default async function handler(
   req: NextApiRequest,
@@ -32,7 +33,16 @@ export default async function handler(
             const user = await collection.findOne({
               username: parsedBody.username,
             });
-            res.json({ status: 201, user: user });
+            if (!user) {
+              res.json({ status: 500 });
+              return;
+            }
+            const userDTO: UserDTO = {
+              username: user.username,
+              recipes: user.recipes,
+              _id: `${user._id}`,
+            };
+            res.json({ status: 201, user: userDTO });
           }
           break;
         case "login":
@@ -44,16 +54,25 @@ export default async function handler(
             res.json({ status: 403 });
             return;
           }
-          res.json({ status: 200, user: userToValidate });
+          const userDTO: UserDTO = {
+            username: userToValidate.username,
+            recipes: userToValidate.recipes,
+            _id: `${userToValidate._id}`,
+          };
+          res.json({ status: 200, user: userDTO });
           break;
       }
       break;
 
     case "GET":
       const allUsers = await collection.find().toArray();
+      const userDTOs = allUsers.map((user) => ({
+        username: user.username,
+        recipes: user.recipes,
+      }));
       res.json(
         allUsers
-          ? { status: 200, users: allUsers }
+          ? { status: 200, users: userDTOs }
           : { status: 404, users: [] },
       );
       break;

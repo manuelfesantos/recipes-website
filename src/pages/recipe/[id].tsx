@@ -10,20 +10,68 @@ import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Header from "@/components/Header";
-import { User } from "@/types/user";
+import { UserDTO } from "@/types/user";
+import { getCollection } from "@/utils/mongo-db/db-client";
+import { ObjectId } from "mongodb";
+import { buildUserDTOFromDocument } from "@/utils/transformer/documentToDTO";
+import FavoritesButton from "@/components/FavoritesButton";
 
 export default function RecipePage({
   recipe,
   user,
 }: {
   recipe: RecipeDetails;
-  user: User | null;
+  user: UserDTO | null;
 }) {
   const images = recipe.images;
 
   const image = images.LARGE?.url ?? recipe.image;
   const imageLoader = () => image;
   const router = useRouter();
+
+  const handleAddToFavorites = async () => {
+    if (user && user.recipes) {
+      console.log("adding recipe");
+      const userToSave: UserDTO = {
+        username: user.username,
+        _id: user._id,
+        recipes: [...user.recipes, recipe],
+      };
+      await updateUser(userToSave);
+    }
+  };
+
+  const handleRemoveFromFavorites = async () => {
+    if (user && user.recipes) {
+      console.log("removing recipe");
+      const userToSave: UserDTO = {
+        username: user.username,
+        _id: user._id,
+        recipes: user.recipes.filter(
+          (userRecipe) => userRecipe.uri !== recipe.uri,
+        ),
+      };
+      await updateUser(userToSave);
+    }
+  };
+
+  const updateUser = async (userToSave: UserDTO) => {
+    const responsePromise = await fetch(`/api/users/${userToSave._id}`, {
+      method: "PUT",
+      body: JSON.stringify(userToSave),
+    });
+
+    const response = await responsePromise.json();
+    if (response.status === 202) {
+      console.log("updating recipes");
+    }
+  };
+
+  const isFavorite = () => {
+    return (
+      user?.recipes.some((userRecipe) => userRecipe.uri === recipe.uri) ?? false
+    );
+  };
 
   return (
     <>
@@ -57,14 +105,16 @@ export default function RecipePage({
           >
             Get Preparation Steps
           </Link>
-          <Link
-            className={styles.link}
-            href={`/?id=${router.query.id}`}
-            scroll={true}
-          >
+          <button className={styles.link} onClick={() => router.back()}>
             Back to Recipes
-          </Link>
-          {user && <button className={styles.link}>Add to Favorites</button>}
+          </button>
+          {user && (
+            <FavoritesButton
+              handleAddToFavorites={handleAddToFavorites}
+              handleRemoveFromFavorites={handleRemoveFromFavorites}
+              favorite={isFavorite()}
+            />
+          )}
         </div>
       </div>
     </>
@@ -79,10 +129,29 @@ export const getServerSideProps: GetServerSideProps = async ({
   const wrappedRecipe = getSingleRecipeById(params.slice(3));
   const recipe = (await wrappedRecipe).recipe as RecipeDetails;
 
-  const user = req.cookies.user;
-  const parsedUser = JSON.parse(user ?? "{}");
-  const userResponse = Object.keys(parsedUser).length ? parsedUser : null;
+  const userId = req.cookies.user;
+  if (!userId) {
+    return {
+      props: {
+        recipe,
+        user: null,
+      },
+    };
+  }
+  const collection = await getCollection();
+  const user = await collection.findOne({ _id: new ObjectId(userId) });
+  if (!user) {
+    return {
+      props: {
+        recipe,
+        user: null,
+      },
+    };
+  }
   return {
-    props: { recipe, user: userResponse },
+    props: {
+      recipe,
+      user: buildUserDTOFromDocument(user),
+    },
   };
 };

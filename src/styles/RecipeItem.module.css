@@ -1,3 +1,7 @@
+.recipeCard {
+    position: relative;
+}
+
 .recipeDiv {
     width: var(--recipe-item-width);
     max-width: 90vw;
@@ -66,4 +70,19 @@
 
 .overlay:active {
     opacity: 0.5;
+}
+
+.favorite {
+    border-radius: 50%;
+    background-color: rgba(245, 245, 220, 0.7);
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 99;
+    font-size: 30px;
 }

@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Header from "@/components/Header";
 import { useEffect, useRef } from "react";
-import { User } from "@/types/user";
+import { User, UserCredentials } from "@/types/user";
 import { toast, Toaster } from "react-hot-toast";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next";
@@ -21,6 +21,7 @@ export default function Signup({ isLoggedIn }: { isLoggedIn: boolean }) {
     const user: User = {
       username: username.current.value,
       password: password.current.value,
+      recipes: [],
     };
     const headers = new Headers();
     headers.append("action", "signup");
@@ -32,7 +33,7 @@ export default function Signup({ isLoggedIn }: { isLoggedIn: boolean }) {
     const response = await responsePromise.json();
     if (response.status === 201) {
       toast.success("User created Successfully");
-      setCookie("user", JSON.stringify(response.user));
+      setCookie("user", JSON.stringify(response.user._id));
       setTimeout(async () => await router.push("/profile"), 2000);
     } else if (response.status === 400) {
       toast.error("Username already exists");
@@ -45,7 +46,7 @@ export default function Signup({ isLoggedIn }: { isLoggedIn: boolean }) {
       return;
     }
 
-    const user: User = {
+    const userCredentials: UserCredentials = {
       username: username.current.value,
       password: password.current.value,
     };
@@ -54,15 +55,12 @@ export default function Signup({ isLoggedIn }: { isLoggedIn: boolean }) {
     headers.append("action", "login");
     const responsePromise = await fetch(`/api/users`, {
       method: "POST",
-      body: JSON.stringify({
-        username: `${user.username}`,
-        password: `${user.password}`,
-      }),
+      body: JSON.stringify(userCredentials),
       headers: headers,
     });
     const response = await responsePromise.json();
     if (response.status === 200) {
-      setCookie("user", response.user);
+      setCookie("user", response.user._id);
       await router.push("/profile");
     } else if (response.status === 404 || response.status === 403) {
       toast.error("Invalid Username or Password");
