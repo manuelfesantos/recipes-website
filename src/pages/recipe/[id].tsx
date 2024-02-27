@@ -59,7 +59,7 @@ export default function RecipePage({
           </Link>
           <Link
             className={styles.link}
-            href={`/#${router.query.id}`}
+            href={`/?id=${router.query.id}`}
             scroll={true}
           >
             Back to Recipes
