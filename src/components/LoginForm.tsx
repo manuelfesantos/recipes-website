@@ -26,6 +26,7 @@ export default function LoginForm({ handleLogin }: Props) {
     }
 
     setFormFilled(true);
+    setFormValid(true);
 
     const userCredentials: UserCredentials = {
       username: username.current.value,
@@ -36,7 +37,6 @@ export default function LoginForm({ handleLogin }: Props) {
 
     const response = await responsePromise.json();
     if (response.status === 200) {
-      setFormValid(true);
       setCookie("user", response.user._id);
       router.back();
     } else if (response.status === 404 || response.status === 403) {

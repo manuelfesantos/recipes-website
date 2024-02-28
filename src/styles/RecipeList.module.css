@@ -4,13 +4,11 @@
     margin-top: 10vh;
     display: flex;
     justify-content: center;
-    gap: 20px 10px;
+    gap: 10px 10px;
     flex-wrap: wrap;
     margin-bottom: 50px;
 }
 
-.recipeList > * {
-}
 
 
 .btn {

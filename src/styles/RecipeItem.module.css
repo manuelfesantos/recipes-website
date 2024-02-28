@@ -9,7 +9,7 @@
     max-width: 90vw;
     height: var(--recipe-item-height);
     border-radius: var(--border-radius);
-    background-color: var(--secondary-dark);
+    background-color: var(--secondary-light);
     color: var(--primary-light);
     display: flex;
     flex-direction: column;
@@ -37,7 +37,7 @@
 .img {
     width: var(--recipe-item-width);
     max-width: 90vw;
-    height: unset;
+    height: auto;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }

@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getCollection } from "@/utils/mongo-db/db-client";
-import { UserDTO } from "@/types/user";
+import { User, UserDTO } from "@/types/user";
+import process from "process";
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,6 +16,8 @@ export default async function handler(
 
   switch (req.method) {
     case "POST":
+      const bcrypt = require("bcrypt");
+
       const action = `${req.headers.action}`;
 
       const parsedBody = JSON.parse(req.body ?? "");
@@ -29,20 +32,33 @@ export default async function handler(
           if (alreadyExists) {
             res.json({ status: 400 });
           } else {
-            const response = await collection.insertOne(parsedBody);
-            const user = await collection.findOne({
+            const userToSave: User = {
               username: parsedBody.username,
-            });
-            if (!user) {
-              res.json({ status: 500 });
-              return;
-            }
-            const userDTO: UserDTO = {
-              username: user.username,
-              recipes: user.recipes,
-              _id: `${user._id}`,
+              password: parsedBody.password,
+              recipes: parsedBody.recipes,
             };
-            res.json({ status: 201, user: userDTO });
+            bcrypt
+              .hash(parsedBody.password, Number(process.env.SALT_ROUNDS))
+              .then(async (hash: any) => {
+                console.log(hash);
+                const response = await collection.insertOne({
+                  ...parsedBody,
+                  password: hash,
+                });
+                const user = await collection.findOne({
+                  username: parsedBody.username,
+                });
+                if (!user) {
+                  res.json({ status: 500 });
+                  return;
+                }
+                const userDTO: UserDTO = {
+                  username: user.username,
+                  recipes: user.recipes,
+                  _id: `${user._id}`,
+                };
+                res.json({ status: 201, user: userDTO });
+              });
           }
           break;
         case "login":
@@ -50,16 +66,23 @@ export default async function handler(
             res.json({ status: 404 });
             return;
           }
-          if (parsedBody.password !== userToValidate.password) {
-            res.json({ status: 403 });
-            return;
-          }
-          const userDTO: UserDTO = {
-            username: userToValidate.username,
-            recipes: userToValidate.recipes,
-            _id: `${userToValidate._id}`,
-          };
-          res.json({ status: 200, user: userDTO });
+
+          bcrypt.compare(
+            parsedBody.password,
+            userToValidate.password,
+            (err: any, result: boolean) => {
+              if (!result) {
+                res.json({ status: 403 });
+                return;
+              }
+              const userDTO: UserDTO = {
+                username: userToValidate.username,
+                recipes: userToValidate.recipes,
+                _id: `${userToValidate._id}`,
+              };
+              res.json({ status: 200, user: userDTO });
+            },
+          );
           break;
       }
       break;

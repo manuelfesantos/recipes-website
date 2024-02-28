@@ -116,6 +116,7 @@ export default function RecipePage({
           </button>
         </div>
       </div>
+      <div className={styles.background} />
     </>
   );
 }

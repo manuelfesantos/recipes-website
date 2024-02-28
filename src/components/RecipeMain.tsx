@@ -15,9 +15,13 @@ export default function RecipeMain({ user }: Props) {
   const [nextRecipes, setNextRecipes] = useState<string>("");
   const [isLoaded, setLoaded] = useState(false);
   const [userDTO, setUserDTO] = useState<UserDTO | null>(user);
+  const [checkedRecipes, setCheckedRecipes] = useState<boolean>(false);
   const loadRecipes = async (searchText: string) => {
+    console.log(searchText);
+    const safeSearchText = searchText.replace(/[^A-Z0-9]/gi, " ");
+    console.log(safeSearchText);
     setNextRecipes("");
-    const responsePromise = await fetch(`/api/recipes/${searchText}`);
+    const responsePromise = await fetch(`/api/recipes/${safeSearchText}`);
     const response = await responsePromise.json();
     if (response.status === 200) {
       const recipesList = response.recipes as RecipeListResponse;
@@ -105,10 +109,12 @@ export default function RecipeMain({ user }: Props) {
   };
 
   useEffect(() => {
-    if (!userDTO) {
+    if (!userDTO && user) {
       setUserDTO(user);
     }
-    if (!recipes.length) {
+    if (!recipes.length && !checkedRecipes) {
+      console.log("test");
+
       const parsedRecipes = JSON.parse(
         sessionStorage.getItem("recipes")!,
       ) as Recipe[];
@@ -119,6 +125,7 @@ export default function RecipeMain({ user }: Props) {
       if (nextRecipesLink) {
         setNextRecipes(nextRecipesLink);
       }
+      setCheckedRecipes(true);
     } else if (!isLoaded) {
       const id = sessionStorage.getItem("currentRecipe");
       if (id) {
@@ -133,7 +140,7 @@ export default function RecipeMain({ user }: Props) {
       }
       setLoaded(true);
     }
-  }, [recipes, isLoaded]);
+  }, [user, userDTO, recipes, isLoaded]);
 
   return (
     <>

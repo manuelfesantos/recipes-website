@@ -16,6 +16,7 @@ export default function SignupForm({ handleSignup }: Props) {
   const [formFilled, setFormFilled] = useState<boolean>(false);
   const [userValid, setUserValid] = useState<boolean>(false);
   const [passwordsMatch, setPasswordsMatch] = useState<boolean>(false);
+  const [isLoaded, setLoaded] = useState<boolean>(false);
   const router = useRouter();
 
   const signup = async () => {
@@ -36,6 +37,7 @@ export default function SignupForm({ handleSignup }: Props) {
       return;
     }
     setPasswordsMatch(true);
+    setUserValid(true);
     const user: User = {
       username: username.current.value,
       password: password.current.value,
@@ -45,7 +47,7 @@ export default function SignupForm({ handleSignup }: Props) {
 
     const response = await responsePromise.json();
     if (response.status === 201) {
-      setUserValid(true);
+      setLoaded(true);
       setCookie("user", response.user._id);
       setTimeout(async () => await router.push("/profile"), 2000);
     } else if (response.status === 400) {
@@ -103,7 +105,7 @@ export default function SignupForm({ handleSignup }: Props) {
       {formFilled && passwordsMatch && !userValid && (
         <p className={styles.signupMessage}>Username already exists</p>
       )}
-      {formFilled && passwordsMatch && userValid && (
+      {formFilled && passwordsMatch && userValid && isLoaded && (
         <p className={styles.signupMessage}>User created successfully</p>
       )}
     </form>
