@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getCollection } from "@/utils/mongo-db/db-client";
 import { ObjectId } from "mongodb";
-import { User, UserDTO } from "@/types/user";
+import { UserDTO } from "@/types/user";
 
 export default async function handler(
   req: NextApiRequest,

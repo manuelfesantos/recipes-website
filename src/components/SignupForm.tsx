@@ -1,7 +1,7 @@
 import styles from "@/styles/Login.module.css";
 import { useRouter } from "next/router";
 import { useRef, useState } from "react";
-import { User, UserCredentials } from "@/types/user";
+import { User } from "@/types/user";
 import { setCookie } from "cookies-next";
 
 interface Props {

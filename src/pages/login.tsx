@@ -1,10 +1,7 @@
 import Head from "next/head";
 import Header from "@/components/Header";
-import { useRef } from "react";
 import { UserCredentials } from "@/types/user";
-import { useRouter } from "next/router";
 import { GetServerSideProps } from "next";
-import { setCookie } from "cookies-next";
 import styles from "@/styles/Login.module.css";
 import LoginForm from "@/components/LoginForm";
 

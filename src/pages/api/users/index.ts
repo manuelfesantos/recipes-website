@@ -40,7 +40,6 @@ export default async function handler(
             bcrypt
               .hash(parsedBody.password, Number(process.env.SALT_ROUNDS))
               .then(async (hash: any) => {
-                console.log(hash);
                 const response = await collection.insertOne({
                   ...parsedBody,
                   password: hash,
