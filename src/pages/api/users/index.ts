@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getCollection } from "@/utils/mongo-db/db-client";
 import { User, UserDTO } from "@/types/user";
 import process from "process";
+import { buildUserDTOFromDocument } from "@/utils/transformer/documentToDTO";
 
 export default async function handler(
   req: NextApiRequest,
@@ -32,15 +33,10 @@ export default async function handler(
           if (alreadyExists) {
             res.json({ status: 400 });
           } else {
-            const userToSave: User = {
-              username: parsedBody.username,
-              password: parsedBody.password,
-              recipes: parsedBody.recipes,
-            };
             bcrypt
               .hash(parsedBody.password, Number(process.env.SALT_ROUNDS))
               .then(async (hash: any) => {
-                const response = await collection.insertOne({
+                await collection.insertOne({
                   ...parsedBody,
                   password: hash,
                 });
@@ -51,11 +47,7 @@ export default async function handler(
                   res.json({ status: 500 });
                   return;
                 }
-                const userDTO: UserDTO = {
-                  username: user.username,
-                  recipes: user.recipes,
-                  _id: `${user._id}`,
-                };
+                const userDTO: UserDTO = buildUserDTOFromDocument(user);
                 res.json({ status: 201, user: userDTO });
               });
           }
@@ -74,11 +66,7 @@ export default async function handler(
                 res.json({ status: 403 });
                 return;
               }
-              const userDTO: UserDTO = {
-                username: userToValidate.username,
-                recipes: userToValidate.recipes,
-                _id: `${userToValidate._id}`,
-              };
+              const userDTO: UserDTO = buildUserDTOFromDocument(userToValidate);
               res.json({ status: 200, user: userDTO });
             },
           );

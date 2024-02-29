@@ -87,6 +87,11 @@
     left: 20px;
     z-index: 99;
     font-size: 30px;
+    opacity: 60%;
+}
+
+.favorite:hover {
+    opacity: 100%;
 }
 
 .isFavorite {

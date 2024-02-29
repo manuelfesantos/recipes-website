@@ -9,27 +9,36 @@ const router = createApiFileRouter("picture");
 router.put(async (req, res) => {
   const command = new PutObjectCommand({
     Bucket: process.env.BUCKET_NAME,
-    Key: req.file.originalname,
+    Key: `${req.query.name}`,
   });
+  console.log(req.query.name);
   const url = await getSignedUrl(r2Client, command, {
     expiresIn: 3600,
   });
   const headers = new Headers();
 
-  await fetch(url, {
+  console.log(req.file);
+
+  const response = await fetch(url, {
     method: "PUT",
     body: req.file.buffer,
     headers: headers,
   });
 
-  const fileNameArray = req.file.originalname.split(".");
-  fileNameArray.pop();
-  const fileName = fileNameArray.join("");
+  console.log(response.status);
 
-  res.json({
-    status: 200,
-    message: `${fileName} uploaded successfully`,
-  });
+  if (response.status === 200) {
+    const fileNameArray = req.file.originalname.split(".");
+    fileNameArray.pop();
+    const fileName = fileNameArray.join("");
+
+    res.json({
+      status: 200,
+      message: `${fileName} uploaded successfully`,
+    });
+  } else {
+    res.json({ status: 500 });
+  }
 });
 
 export default router.handler();

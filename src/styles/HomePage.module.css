@@ -4,8 +4,9 @@
     z-index: -1;
     width: 100vw;
     height: 100vh;
-    background-image: url("/wallpaperflare.com_wallpaper.jpg");
+    background-image: url("/desktop-1920x1080.jpg");
     background-position: center;
+    background-size: cover;
 }
 
 .homeDiv {
@@ -33,6 +34,33 @@
 
 .homeDiv p {
     position: absolute;
-    top: 150px;
+    top: 130px;
     color: var(--primary-light);
+    background-color: var(--secondary-light);
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px var(--secondary-dark-less-opacity);
+    cursor: pointer;
+}
+
+.homeDiv p:hover {
+    background-color: var(--primary-light);
+    color: var(--secondary-dark);
+}
+
+.homeDiv p:active {
+    background-color: var(--primary-dark);
+    color: var(--secondary-light);
+}
+
+@media screen and (max-width: 547px){
+    .homeDiv p {
+        top: 190px;
+    }
+}
+
+@media screen and (max-width: 330px){
+    .homeDiv p {
+        font-size: 13px;
+    }
 }

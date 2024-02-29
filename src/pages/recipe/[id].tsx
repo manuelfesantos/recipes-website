@@ -33,8 +33,7 @@ export default function RecipePage({
     if (user && user.recipes) {
       console.log("adding recipe");
       const userToSave: UserDTO = {
-        username: user.username,
-        _id: user._id,
+        ...user,
         recipes: [...user.recipes, recipe],
       };
       await updateUser(userToSave);
@@ -45,8 +44,7 @@ export default function RecipePage({
     if (user && user.recipes) {
       console.log("removing recipe");
       const userToSave: UserDTO = {
-        username: user.username,
-        _id: user._id,
+        ...user,
         recipes: user.recipes.filter(
           (userRecipe) => userRecipe.uri !== recipe.uri,
         ),
@@ -56,9 +54,12 @@ export default function RecipePage({
   };
 
   const updateUser = async (userToSave: UserDTO) => {
+    const headers = new Headers();
+    headers.append("property", "recipes");
     const responsePromise = await fetch(`/api/users/${userToSave._id}`, {
       method: "PUT",
       body: JSON.stringify(userToSave),
+      headers: headers,
     });
 
     const response = await responsePromise.json();

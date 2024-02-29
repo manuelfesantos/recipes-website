@@ -13,8 +13,7 @@ export default function FavoriteMain({ user }: Props) {
   const handleAddToFavorites = async (recipe: Recipe) => {
     console.log("adding recipe");
     const userToSave: UserDTO = {
-      username: user.username,
-      _id: user._id,
+      ...user,
       recipes: [...user.recipes, recipe],
     };
     await updateUser(userToSave);
@@ -23,8 +22,7 @@ export default function FavoriteMain({ user }: Props) {
   const handleRemoveFromFavorites = async (recipe: Recipe) => {
     console.log("removing recipe");
     const userToSave: UserDTO = {
-      username: user.username,
-      _id: user._id,
+      ...user,
       recipes: recipes.filter((userRecipe) => userRecipe.uri !== recipe.uri),
     };
     await updateUser(userToSave);
@@ -32,9 +30,12 @@ export default function FavoriteMain({ user }: Props) {
 
   const updateUser = async (userToSave: UserDTO) => {
     setRecipes(userToSave.recipes);
+    const headers = new Headers();
+    headers.append("property", "recipes");
     const responsePromise = await fetch(`/api/users/${userToSave._id}`, {
       method: "PUT",
       body: JSON.stringify(userToSave),
+      headers: headers,
     });
 
     const response = await responsePromise.json();
@@ -60,7 +61,7 @@ export default function FavoriteMain({ user }: Props) {
 
   return (
     <>
-      <h1 className={styles.title}>{`${user.username}'s Favorite recipes`}</h1>
+      <h1 className={styles.title}>{`Your Favorite Recipes`}</h1>
       <div className={styles.favoriteDiv}>
         <RecipeList
           recipes={recipes}

@@ -6,6 +6,7 @@ import SearchHeader from "@/components/SearchHeader";
 import RecipeList from "@/components/RecipeList";
 import Link from "next/link";
 import { UserDTO } from "@/types/user";
+import { useRouter } from "next/router";
 
 interface Props {
   user: UserDTO | null;
@@ -16,10 +17,9 @@ export default function RecipeMain({ user }: Props) {
   const [isLoaded, setLoaded] = useState(false);
   const [userDTO, setUserDTO] = useState<UserDTO | null>(user);
   const [checkedRecipes, setCheckedRecipes] = useState<boolean>(false);
+  const router = useRouter();
   const loadRecipes = async (searchText: string) => {
-    console.log(searchText);
     const safeSearchText = searchText.replace(/[^A-Z0-9]/gi, " ");
-    console.log(safeSearchText);
     setNextRecipes("");
     const responsePromise = await fetch(`/api/recipes/${safeSearchText}`);
     const response = await responsePromise.json();
@@ -76,8 +76,7 @@ export default function RecipeMain({ user }: Props) {
   const handleAddToFavorites = async (recipe: Recipe) => {
     if (userDTO && userDTO.recipes) {
       const userToSave: UserDTO = {
-        username: userDTO.username,
-        _id: userDTO._id,
+        ...userDTO,
         recipes: [...userDTO.recipes, recipe],
       };
       await updateUser(userToSave);
@@ -87,8 +86,7 @@ export default function RecipeMain({ user }: Props) {
   const handleRemoveFromFavorites = async (recipe: Recipe) => {
     if (userDTO && userDTO.recipes) {
       const userToSave: UserDTO = {
-        username: userDTO.username,
-        _id: userDTO._id,
+        ...userDTO,
         recipes: userDTO.recipes.filter(
           (userRecipe) => userRecipe.uri !== recipe.uri,
         ),
@@ -98,9 +96,12 @@ export default function RecipeMain({ user }: Props) {
   };
 
   const updateUser = async (userToSave: UserDTO) => {
+    const headers = new Headers();
+    headers.append("property", "recipes");
     const responsePromise = await fetch(`/api/users/${userToSave._id}`, {
       method: "PUT",
       body: JSON.stringify(userToSave),
+      headers: headers,
     });
     const response = await responsePromise.json();
     if (response.status === 202) {
@@ -113,8 +114,6 @@ export default function RecipeMain({ user }: Props) {
       setUserDTO(user);
     }
     if (!recipes.length && !checkedRecipes) {
-      console.log("test");
-
       const parsedRecipes = JSON.parse(
         sessionStorage.getItem("recipes")!,
       ) as Recipe[];
@@ -152,7 +151,11 @@ export default function RecipeMain({ user }: Props) {
       >
         <div className={styles.homeDiv}>
           <SearchHeader handleLoadRecipes={loadRecipes} />
-          {!userDTO && <p>Login to add recipes to your favorites</p>}
+          {!userDTO && (
+            <p onClick={() => router.push("/login")}>
+              Login to add recipes to your favorites
+            </p>
+          )}
           <RecipeList
             recipes={recipes}
             user={userDTO}

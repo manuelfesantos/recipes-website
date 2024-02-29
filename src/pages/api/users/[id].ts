@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getCollection } from "@/utils/mongo-db/db-client";
 import { ObjectId } from "mongodb";
 import { UserDTO } from "@/types/user";
+import { buildUserDTOFromDocument } from "@/utils/transformer/documentToDTO";
 
 export default async function handler(
   req: NextApiRequest,
@@ -27,23 +28,28 @@ export default async function handler(
         res.json({ status: 404 });
         return;
       }
-      const getUserDTO: UserDTO = {
-        username: getResult.username,
-        recipes: getResult.recipes,
-        _id: `${getResult._id}`,
-      };
+      const getUserDTO: UserDTO = buildUserDTOFromDocument(getResult);
       res.json({ status: 200, user: JSON.stringify(getUserDTO) });
 
       break;
     case "PUT":
       const putParsedBody: UserDTO = JSON.parse(req.body ?? "");
+
+      const updateQuery: any = {};
+
+      switch (req.headers.property) {
+        case "recipes":
+          updateQuery.recipes = putParsedBody.recipes;
+          break;
+        case "imageUrl":
+          updateQuery.imageUrl = putParsedBody.imageUrl;
+          break;
+      }
+
       const putResult = await collection.updateOne(
         { _id: new ObjectId(id) },
         {
-          $set: {
-            username: putParsedBody.username,
-            recipes: putParsedBody.recipes,
-          },
+          $set: updateQuery,
         },
       );
       if (!putResult.matchedCount) {
@@ -58,11 +64,7 @@ export default async function handler(
         return;
       }
 
-      const putUserDTO: UserDTO = {
-        username: putUser.username,
-        recipes: putUser.recipes,
-        _id: `${putUser._id}`,
-      };
+      const putUserDTO: UserDTO = buildUserDTOFromDocument(putUser);
 
       res.json({
         status: 202,

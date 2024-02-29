@@ -1,0 +1,77 @@
+.profileDiv {
+    margin-top: 50px;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: var(--primary-light);
+}
+
+.userDetails {
+    width: 500px;
+    max-width: 80vw;
+    min-width: 50vw;
+    height: 500px;
+    display: flex;
+    border-radius: 20px;
+    background-color: var(--secondary-light);
+}
+
+.userDetails > * {
+    padding: 10px;
+    flex: 1;
+}
+
+.userLinks {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.userData {
+
+}
+
+.title {
+
+}
+
+.profilePic {
+    border-radius: 50%;
+    width: 300px;
+    height: 300px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.btn {
+    border-radius: 10px;
+    width: 150px;
+    height: 40px;
+    border: 0;
+    background-color: var(--primary-light);
+    color: var(--secondary-dark);
+    text-align: center;
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: var(--secondary-dark);
+    color: var(--primary-light);
+}
+
+.btn:active {
+    background-color: var(--secondary-light);
+    color: var(--primary-dark);
+}
+
+.favoritesLink {
+    text-decoration: none;
+}

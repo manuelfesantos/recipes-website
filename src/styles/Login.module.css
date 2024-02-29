@@ -39,7 +39,7 @@
 }
 
 .formField input {
-    width: 300px;
+    width: 200px;
     max-width: 90%;
     height: 30px;
     border: 0;
@@ -111,6 +111,19 @@
     bottom: 70px;
 }
 
+.formPair {
+display: flex;
+}
+
+.buttonsPair {
+    display: flex;
+    gap: 20px;
+}
+
+.formField input.invalid {
+    border: 2px solid red;
+}
+
 @media screen and (max-width: 600px){
 
     .loginMessage {
@@ -120,4 +133,43 @@
     .options {
         flex-direction: column;
     }
+
+    .formField input {
+        width: 170px;
+    }
+}
+
+@media screen and (max-width: 400px){
+    .formField input {
+        width: 150px;
+        font-size: 13px;
+    }
+}
+
+@media screen and (max-width: 350px){
+
+    .loginDiv {
+        background-repeat: repeat;
+        position: fixed;
+        height: 800px;
+    }
+
+    .loginForm {
+        height: 750px;
+        gap: 20px;
+    }
+
+    .formField input {
+        width: 200px;
+    }
+    .formPair {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .signupMessage {
+        bottom: 30px;
+    }
+
+
 }

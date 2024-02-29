@@ -2,7 +2,6 @@ import RecipeItem from "@/components/RecipeItem";
 import { Recipe } from "@/types/recipes";
 import styles from "@/styles/RecipeList.module.css";
 import { UserDTO } from "@/types/user";
-import { useEffect } from "react";
 
 interface Props {
   recipes: Recipe[];
@@ -17,7 +16,6 @@ export default function RecipeList({
   handleRemoveFavorite,
   handleAddFavorite,
 }: Props) {
-  useEffect(() => {}, []);
   return (
     <div className={styles.recipeList}>
       {recipes.map((recipe) => (
