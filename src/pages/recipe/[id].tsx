@@ -15,6 +15,7 @@ import { getCollection } from "@/utils/mongo-db/db-client";
 import { ObjectId } from "mongodb";
 import { buildUserDTOFromDocument } from "@/utils/transformer/documentToDTO";
 import FavoritesButton from "@/components/FavoritesButton";
+import Background from "@/components/Background";
 
 export default function RecipePage({
   recipe,
@@ -117,7 +118,7 @@ export default function RecipePage({
           </button>
         </div>
       </div>
-      <div className={styles.background} />
+      <Background />
     </>
   );
 }

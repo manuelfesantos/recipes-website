@@ -59,6 +59,7 @@ export default function SignupForm({ handleSignup }: Props) {
       username: username.current.value,
       password: password.current.value,
       firstName: firstName.current.value,
+      imageUrl: "",
       lastName: lastName.current.value,
       email: email.current.value,
       recipes: [],
@@ -165,7 +166,7 @@ export default function SignupForm({ handleSignup }: Props) {
       <div className={styles.buttonsPair}>
         <button
           type={"button"}
-          onClick={() => setShowingPasswords(!showingPasswords)}
+          onClick={() => setShowingPasswords((prevState) => !prevState)}
         >
           {showingPasswords ? "Hide Passwords" : "Show Passwords"}
         </button>

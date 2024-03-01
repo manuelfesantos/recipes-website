@@ -3,12 +3,14 @@ import { useEffect, useState } from "react";
 import { Recipe } from "@/types/recipes";
 import { UserDTO } from "@/types/user";
 import styles from "@/styles/FavoriteMain.module.css";
+import { useRouter } from "next/router";
 
 interface Props {
   user: UserDTO;
 }
 export default function FavoriteMain({ user }: Props) {
   const [recipes, setRecipes] = useState<Recipe[]>(user.recipes);
+  const router = useRouter();
 
   const handleAddToFavorites = async (recipe: Recipe) => {
     console.log("adding recipe");
@@ -61,14 +63,29 @@ export default function FavoriteMain({ user }: Props) {
 
   return (
     <>
-      <h1 className={styles.title}>{`Your Favorite Recipes`}</h1>
-      <div className={styles.favoriteDiv}>
-        <RecipeList
-          recipes={recipes}
-          user={user}
-          handleAddFavorite={handleAddToFavorites}
-          handleRemoveFavorite={handleRemoveFromFavorites}
-        />
+      <div className={styles.favoriteMain}>
+        <div className={styles.favoriteDiv}>
+          {recipes.length ? (
+            <>
+              <h1 className={styles.title}>{`Your Favorite Recipes`}</h1>
+              <RecipeList
+                recipes={recipes}
+                user={user}
+                handleAddFavorite={handleAddToFavorites}
+                handleRemoveFavorite={handleRemoveFromFavorites}
+              />
+            </>
+          ) : (
+            <h1 className={styles.title}>There are no favorite recipes</h1>
+          )}
+          <button
+            onClick={() => router.push("/profile")}
+            className={styles.backBtn}
+            type={"button"}
+          >
+            Back to Profile
+          </button>
+        </div>
       </div>
     </>
   );

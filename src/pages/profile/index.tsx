@@ -10,6 +10,7 @@ import { buildUserDTOFromDocument } from "@/utils/transformer/documentToDTO";
 import Link from "next/link";
 import styles from "@/styles/ProfilePage.module.css";
 import { useState } from "react";
+import Background from "@/components/Background";
 
 export default function ProfilePage({ user }: { user: UserDTO }) {
   const router = useRouter();
@@ -71,44 +72,41 @@ export default function ProfilePage({ user }: { user: UserDTO }) {
       </Head>
       <Header />
       <div className={styles.profileDiv}>
+        <h1 className={styles.title}>
+          {user.firstName} {user.lastName}
+        </h1>
         <div className={styles.userDetails}>
-          <div className={styles.userLinks}>
-            <div
-              className={styles.profilePic}
-              style={{
-                backgroundImage: `url(${imageUrl || "/ingredient-icon-6.jpg"})`,
-              }}
-            ></div>
-            <label className={styles.btn} htmlFor={"picture"}>
-              Change Profile Picture
-            </label>
-            <input
-              placeholder={"change profile picture"}
-              id={"picture"}
-              type={"file"}
-              onChange={(event) => changeProfilePic(event.target.files)}
-              style={{ visibility: "hidden" }}
-              accept={"image/jpeg"}
-            />
-            <Link
-              className={`${styles.favoritesLink} ${styles.btn}`}
-              onClick={() => sessionStorage.removeItem("currentRecipe")}
-              href={"/profile/favorites"}
-            >
-              Favorite Recipes
-            </Link>
-            <button className={styles.btn} onClick={handleLogout}>
-              Logout
-            </button>
-          </div>
-          <div>
-            <h1 className={styles.title}>{`${user?.username}`}</h1>
-            <h2>First name: {user.firstName}</h2>
-            <h2>Last name: {user.lastName}</h2>
-            <h2>Email: {user.email}</h2>
-          </div>
+          <div
+            className={styles.profilePic}
+            style={{
+              backgroundImage: `url(${imageUrl || "/default-profile-pic.jpeg"})`,
+            }}
+          ></div>
+          <h2>({user.username})</h2>
+          <label className={styles.btn} htmlFor={"picture"}>
+            Change Profile Picture
+          </label>
+          <input
+            placeholder={"change profile picture"}
+            id={"picture"}
+            type={"file"}
+            onChange={(event) => changeProfilePic(event.target.files)}
+            style={{ visibility: "hidden", position: "absolute" }}
+            accept={"image/jpeg"}
+          />
+          <Link
+            className={`${styles.favoritesLink} ${styles.btn}`}
+            onClick={() => sessionStorage.removeItem("currentRecipe")}
+            href={"/profile/favorites"}
+          >
+            Favorite Recipes
+          </Link>
+          <button className={styles.btn} onClick={handleLogout}>
+            Logout
+          </button>
         </div>
       </div>
+      <Background />
     </>
   );
 }

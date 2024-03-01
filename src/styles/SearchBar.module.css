@@ -32,19 +32,19 @@
 
 .input:focus {
     outline: none;
-    background-color: var(--secondary-light);
+    background-color: var(--secondary-dark);
     color: var(--primary-light);
 }
 
 .input:focus::placeholder {
-    color: var(--secondary-light);
+    color: var(--secondary-dark);
 }
 
 .btn {
     width: 50%;
     height: 100%;
     border: 0;
-    background-color: var(--secondary-light);
+    background-color: var(--secondary-dark);
     transition: background-color 100ms;
     font-weight: bold;
     font-size: large;
@@ -56,7 +56,7 @@
 
 .btn:hover:enabled {
     background-color: var(--primary-light);
-    color: var(--secondary-light);
+    color: var(--secondary-dark);
 }
 
 @media screen and (max-width: 547px) {

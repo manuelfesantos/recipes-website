@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Header from "@/components/Header";
 import styles from "@/styles/About.module.css";
+import Background from "@/components/Background";
 
 export default function About() {
   return (
@@ -13,6 +14,7 @@ export default function About() {
       </Head>
       <Header />
       <div className={styles.aboutDiv}></div>
+      <Background />
     </>
   );
 }

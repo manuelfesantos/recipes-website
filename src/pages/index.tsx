@@ -7,6 +7,7 @@ import { buildUserDTOFromDocument } from "@/utils/transformer/documentToDTO";
 import Head from "next/head";
 import Header from "@/components/Header";
 import styles from "@/styles/HomePage.module.css";
+import Background from "@/components/Background";
 
 export default function HomePage({ user }: { user: UserDTO | null }) {
   return (
@@ -19,7 +20,7 @@ export default function HomePage({ user }: { user: UserDTO | null }) {
       </Head>
       <Header />
       <RecipeMain user={user} />
-      <div className={styles.background}></div>
+      <Background />
     </>
   );
 }

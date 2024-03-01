@@ -6,6 +6,7 @@ import { ObjectId } from "mongodb";
 import { UserDTO } from "@/types/user";
 import { buildUserDTOFromDocument } from "@/utils/transformer/documentToDTO";
 import FavoriteMain from "@/components/FavoriteMain";
+import Background from "@/components/Background";
 
 export default function Favorites({ user }: { user: UserDTO }) {
   return (
@@ -18,6 +19,7 @@ export default function Favorites({ user }: { user: UserDTO }) {
       </Head>
       <Header />
       <FavoriteMain user={user} />
+      <Background />
     </>
   );
 }

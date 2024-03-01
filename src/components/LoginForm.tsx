@@ -13,6 +13,7 @@ export default function LoginForm({ handleLogin }: Props) {
   const password = useRef<HTMLInputElement>(null);
   const [formFilled, setFormFilled] = useState<boolean>(false);
   const [formValid, setFormValid] = useState<boolean>(false);
+  const [showingPassword, setShowingPassword] = useState<boolean>(false);
   const router = useRouter();
 
   const login = async () => {
@@ -59,13 +60,22 @@ export default function LoginForm({ handleLogin }: Props) {
       </div>
       <div className={styles.formField}>
         <label htmlFor={"password"}>Password</label>
-        <input
-          className={styles.input}
-          type={"password"}
-          id={"password"}
-          ref={password}
-          placeholder={"Enter your password"}
-        />
+        <div className={styles.loginPasswordField}>
+          <input
+            className={styles.input}
+            type={showingPassword ? "text" : "password"}
+            id={"password"}
+            ref={password}
+            placeholder={"Enter your password"}
+          />
+        </div>
+        <button
+          className={styles.loginShowPassword}
+          type={"button"}
+          onClick={() => setShowingPassword((prevState) => !prevState)}
+        >
+          {showingPassword ? "Hide Password" : "Show Password"}
+        </button>
       </div>
       <button type={"button"} onClick={login}>
         Login

@@ -4,6 +4,7 @@ import { UserCredentials } from "@/types/user";
 import { GetServerSideProps } from "next";
 import styles from "@/styles/Login.module.css";
 import LoginForm from "@/components/LoginForm";
+import Background from "@/components/Background";
 
 export default function Login() {
   const handleLogin = async (
@@ -30,6 +31,7 @@ export default function Login() {
       <div className={styles.loginDiv}>
         <LoginForm handleLogin={handleLogin} />
       </div>
+      <Background />
     </>
   );
 }
