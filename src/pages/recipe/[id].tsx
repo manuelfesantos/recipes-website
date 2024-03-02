@@ -16,6 +16,7 @@ import { ObjectId } from "mongodb";
 import { buildUserDTOFromDocument } from "@/utils/transformer/documentToDTO";
 import FavoritesButton from "@/components/FavoritesButton";
 import Background from "@/components/Background";
+import process from "process";
 
 export default function RecipePage({
   recipe,
@@ -140,7 +141,9 @@ export const getServerSideProps: GetServerSideProps = async ({
       },
     };
   }
-  const collection = await getCollection();
+  const collection = await getCollection(
+    String(process.env.USERS_COLLECTION_NAME),
+  );
   const user = await collection.findOne({ _id: new ObjectId(userId) });
   if (!user) {
     return {

@@ -11,6 +11,7 @@ import Link from "next/link";
 import styles from "@/styles/ProfilePage.module.css";
 import { useState } from "react";
 import Background from "@/components/Background";
+import process from "process";
 
 export default function ProfilePage({ user }: { user: UserDTO }) {
   const router = useRouter();
@@ -121,7 +122,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
       },
     };
   }
-  const collection = await getCollection();
+  const collection = await getCollection(
+    String(process.env.USERS_COLLECTION_NAME),
+  );
   const user = await collection.findOne({ _id: new ObjectId(userId) });
 
   if (!user) {

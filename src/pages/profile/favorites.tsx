@@ -7,6 +7,7 @@ import { UserDTO } from "@/types/user";
 import { buildUserDTOFromDocument } from "@/utils/transformer/documentToDTO";
 import FavoriteMain from "@/components/FavoriteMain";
 import Background from "@/components/Background";
+import process from "process";
 
 export default function Favorites({ user }: { user: UserDTO }) {
   return (
@@ -29,7 +30,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   if (!userId) {
     return { redirect: { destination: "/login", permanent: false } };
   }
-  const collection = await getCollection();
+  const collection = await getCollection(
+    String(process.env.USERS_COLLECTION_NAME),
+  );
 
   const user = await collection.findOne({ _id: new ObjectId(userId) });
   if (!user) {

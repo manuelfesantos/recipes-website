@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getCollection } from "@/utils/mongo-db/db-client";
-import { User, UserDTO } from "@/types/user";
+import { UserDTO } from "@/types/user";
 import process from "process";
 import { buildUserDTOFromDocument } from "@/utils/transformer/documentToDTO";
+import { comparePasswords, encryptPassword } from "@/utils/bcrypt/bcrypt";
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,7 +14,9 @@ export default async function handler(
     return;
   }
 
-  const collection = await getCollection();
+  const collection = await getCollection(
+    String(process.env.USERS_COLLECTION_NAME),
+  );
 
   switch (req.method) {
     case "POST":
@@ -33,23 +36,28 @@ export default async function handler(
           if (alreadyExists) {
             res.json({ status: 400 });
           } else {
-            bcrypt
-              .hash(parsedBody.password, Number(process.env.SALT_ROUNDS))
-              .then(async (hash: any) => {
-                await collection.insertOne({
-                  ...parsedBody,
-                  password: hash,
-                });
-                const user = await collection.findOne({
-                  username: parsedBody.username,
-                });
-                if (!user) {
-                  res.json({ status: 500 });
-                  return;
-                }
-                const userDTO: UserDTO = buildUserDTOFromDocument(user);
-                res.json({ status: 201, user: userDTO });
+            const encryptedPassword = encryptPassword(parsedBody.password);
+            if (!encryptedPassword) {
+              res.json({
+                status: 500,
+                message: "There was a problem encrypting the password",
               });
+              return;
+            }
+
+            await collection.insertOne({
+              ...parsedBody,
+              password: encryptedPassword,
+            });
+            const user = await collection.findOne({
+              username: parsedBody.username,
+            });
+            if (!user) {
+              res.json({ status: 500 });
+              return;
+            }
+            const userDTO: UserDTO = buildUserDTOFromDocument(user);
+            res.json({ status: 201, user: userDTO });
           }
           break;
         case "login":
@@ -58,18 +66,16 @@ export default async function handler(
             return;
           }
 
-          bcrypt.compare(
+          const passwordsMatch = comparePasswords(
             parsedBody.password,
             userToValidate.password,
-            (err: any, result: boolean) => {
-              if (!result) {
-                res.json({ status: 403 });
-                return;
-              }
-              const userDTO: UserDTO = buildUserDTOFromDocument(userToValidate);
-              res.json({ status: 200, user: userDTO });
-            },
           );
+          if (!passwordsMatch) {
+            res.json({ status: 403 });
+            return;
+          }
+          const userDTO: UserDTO = buildUserDTOFromDocument(userToValidate);
+          res.json({ status: 200, user: userDTO });
           break;
       }
       break;

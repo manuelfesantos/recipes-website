@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint --fix"
+    "lint": "next lint --fix",
+    "prepare": "husky"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.515.0",
@@ -28,7 +29,8 @@
     "react": "^18",
     "react-dom": "^18",
     "react-hot-toast": "^2.4.1",
-    "react-infinite-scroll-component": "^6.1.0"
+    "react-infinite-scroll-component": "^6.1.0",
+    "resend": "^3.2.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^18.5.0",
@@ -38,10 +40,13 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
-    "husky": "^8.0.3",
+    "husky": "^9.0.11",
     "typescript": "^5"
   },
   "husky": {
-    "hooks": {}
+    "hooks": {
+      "commit-msg": "npx commitlint --edit $1",
+      "pre-commit": "npm run lint"
+    }
   }
 }

@@ -11,8 +11,10 @@ const client = new MongoClient(uri, {
   },
 });
 
-export const getCollection = async (): Promise<Collection> => {
+export const getCollection = async (
+  collectionName: string,
+): Promise<Collection> => {
   await client.connect();
   const db = client.db(process.env.DB_NAME);
-  return db.collection(process.env.COLLECTION_NAME ?? "");
+  return db.collection(collectionName);
 };

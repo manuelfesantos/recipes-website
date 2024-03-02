@@ -39,7 +39,7 @@ export default function LoginForm({ handleLogin }: Props) {
     const response = await responsePromise.json();
     if (response.status === 200) {
       setCookie("user", response.user._id);
-      router.back();
+      await router.push("/profile");
     } else if (response.status === 404 || response.status === 403) {
       setFormValid(false);
     }
@@ -84,7 +84,9 @@ export default function LoginForm({ handleLogin }: Props) {
         <h3 onClick={() => router.push("/signup")}>
           {"Don't have an account?"}
         </h3>
-        <h3>{"Forgot you password?"}</h3>
+        <h3 onClick={() => router.push("/profile/reset-password")}>
+          {"Forgot you password?"}
+        </h3>
       </div>
       {!formValid && formFilled && (
         <p className={styles.loginMessage}>Incorrect username or password</p>

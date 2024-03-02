@@ -8,6 +8,7 @@ import Head from "next/head";
 import Header from "@/components/Header";
 import styles from "@/styles/HomePage.module.css";
 import Background from "@/components/Background";
+import process from "process";
 
 export default function HomePage({ user }: { user: UserDTO | null }) {
   return (
@@ -35,7 +36,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     };
   }
 
-  const collection = await getCollection();
+  const collection = await getCollection(
+    String(process.env.USERS_COLLECTION_NAME),
+  );
   const user = await collection.findOne({ _id: new ObjectId(userId) });
   return {
     props: {

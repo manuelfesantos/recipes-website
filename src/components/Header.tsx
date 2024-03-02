@@ -17,12 +17,7 @@ export default function Header() {
     <div className={styles.header}>
       <ul className={styles.navBar}>
         <li>
-          <Link
-            onClick={() => sessionStorage.removeItem("currentRecipe")}
-            href={"/"}
-          >
-            Recipes
-          </Link>
+          <Link href={"/"}>Recipes</Link>
         </li>
         <li>
           <Link href={"/about"}>About</Link>

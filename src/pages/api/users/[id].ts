@@ -3,6 +3,7 @@ import { getCollection } from "@/utils/mongo-db/db-client";
 import { ObjectId } from "mongodb";
 import { UserDTO } from "@/types/user";
 import { buildUserDTOFromDocument } from "@/utils/transformer/documentToDTO";
+import process from "process";
 
 export default async function handler(
   req: NextApiRequest,
@@ -13,7 +14,9 @@ export default async function handler(
     return;
   }
   const id = req.query.id as string;
-  const collection = await getCollection();
+  const collection = await getCollection(
+    String(process.env.USERS_COLLECTION_NAME),
+  );
   switch (req.method) {
     case "DELETE":
       const deleteResult = await collection.deleteOne({
