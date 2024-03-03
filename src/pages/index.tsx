@@ -8,6 +8,7 @@ import Head from "next/head";
 import Header from "@/components/Header";
 import Background from "@/components/Background";
 import process from "process";
+import { deleteCookie } from "cookies-next";
 
 export default function HomePage({ user }: { user: UserDTO | null }) {
   return (
@@ -39,6 +40,15 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     String(process.env.USERS_COLLECTION_NAME),
   );
   const user = await collection.findOne({ _id: new ObjectId(userId) });
+
+  if (!user) {
+    deleteCookie("user");
+    return {
+      props: {
+        user: null,
+      },
+    };
+  }
   return {
     props: {
       user: buildUserDTOFromDocument(user),

@@ -18,6 +18,7 @@ import FavoritesButton from "@/components/FavoritesButton";
 import Background from "@/components/Background";
 import process from "process";
 import { buildRecipeFromRecipeDetails } from "@/utils/transformer/recipe-details-to-recipe";
+import { deleteCookie } from "cookies-next";
 
 export default function RecipePage({
   recipe,
@@ -145,6 +146,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   );
   const user = await collection.findOne({ _id: new ObjectId(userId) });
   if (!user) {
+    deleteCookie("user");
     return {
       props: {
         recipe,

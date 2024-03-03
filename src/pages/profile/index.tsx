@@ -128,6 +128,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const user = await collection.findOne({ _id: new ObjectId(userId) });
 
   if (!user) {
+    deleteCookie("user");
     return {
       redirect: {
         destination: "/login",
