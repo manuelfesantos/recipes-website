@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getCollection } from "@/utils/mongo-db/db-client";
 import { ObjectId } from "mongodb";
 import { UserDTO } from "@/types/user";
-import { buildUserDTOFromDocument } from "@/utils/transformer/documentToDTO";
+import { buildUserDTOFromDocument } from "@/utils/transformer/document-to-dto";
 import process from "process";
 
 export default async function handler(

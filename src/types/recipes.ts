@@ -116,3 +116,5 @@ export interface DailyValue {
   quantity: number;
   unit: string;
 }
+
+export const idFromUri = (uri: string) => uri.slice(51);

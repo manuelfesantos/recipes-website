@@ -1,4 +1,4 @@
-import { Recipe } from "@/types/recipes";
+import { idFromUri, Recipe } from "@/types/recipes";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "@/styles/RecipeItem.module.css";
@@ -47,7 +47,7 @@ export default function RecipeItem({
   };
 
   const saveCurrentRecipe = () => {
-    sessionStorage.setItem("currentRecipe", recipe.uri.slice(51));
+    sessionStorage.setItem("currentRecipe", idFromUri(recipe.uri));
   };
 
   useEffect(() => {
@@ -59,12 +59,12 @@ export default function RecipeItem({
     <div className={styles.recipeCard}>
       <Link
         onClick={() =>
-          sessionStorage.setItem("currentRecipe", recipe.uri.slice(51))
+          sessionStorage.setItem("currentRecipe", idFromUri(recipe.uri))
         }
         className={styles.link}
-        href={`/recipe/${recipe.uri.slice(51)}`}
+        href={`/recipe/${idFromUri(recipe.uri)}`}
       >
-        <div id={recipe.uri.slice(51)} className={styles.recipeDiv}>
+        <div id={idFromUri(recipe.uri)} className={styles.recipeDiv}>
           <div className={styles.overlay}></div>
           <Image
             className={styles.img}

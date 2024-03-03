@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getCollection } from "@/utils/mongo-db/db-client";
 import { UserDTO } from "@/types/user";
 import process from "process";
-import { buildUserDTOFromDocument } from "@/utils/transformer/documentToDTO";
+import { buildUserDTOFromDocument } from "@/utils/transformer/document-to-dto";
 import { comparePasswords, encryptPassword } from "@/utils/bcrypt/bcrypt";
 
 export default async function handler(
