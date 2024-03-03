@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Header from "@/components/Header";
 import { useRouter } from "next/router";
-import { UserDTO } from "@/types/user";
+import { isValidId, UserDTO } from "@/types/user";
 import { GetServerSideProps } from "next";
 import { deleteCookie } from "cookies-next";
 import { getCollection } from "@/utils/mongo-db/db-client";
@@ -112,7 +112,7 @@ export default function ProfilePage({ user }: { user: UserDTO }) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const { user: userId } = req.cookies;
   if (!userId) {
     return {
@@ -122,12 +122,9 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
       },
     };
   }
-  const collection = await getCollection(
-    String(process.env.USERS_COLLECTION_NAME),
-  );
-  const user = await collection.findOne({ _id: new ObjectId(userId) });
 
-  if (!user) {
+  if (!isValidId(userId)) {
+    res.setHeader("Set-Cookie", `user=deleted; Max-Age=0`);
     return {
       redirect: {
         destination: "/login",
@@ -135,5 +132,31 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
       },
     };
   }
-  return { props: { user: buildUserDTOFromDocument(user) } };
+
+  const collection = await getCollection(
+    String(process.env.USERS_COLLECTION_NAME),
+  );
+
+  try {
+    const user = await collection.findOne({ _id: new ObjectId(userId) });
+
+    if (!user) {
+      deleteCookie("user");
+      return {
+        redirect: {
+          destination: "/login",
+          permanent: false,
+        },
+      };
+    }
+    return { props: { user: buildUserDTOFromDocument(user) } };
+  } catch (error) {
+    console.log("Error: ", error);
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
 };

@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Header from "@/components/Header";
-import { User } from "@/types/user";
+import { isValidId, User } from "@/types/user";
 import { GetServerSideProps } from "next";
 import styles from "@/styles/Login.module.css";
 import SignupForm from "@/components/SignupForm";
@@ -34,15 +34,21 @@ export default function Signup() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const { user } = req.cookies;
-  if (user) {
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+  const { user: userId } = req.cookies;
+  if (!userId) {
+    return await new Promise((resolve) => resolve({ props: {} }));
+  }
+  if (!isValidId(userId)) {
+    res.setHeader("Set-Cookie", `user=deleted; Max-Age=0`);
     return {
-      redirect: {
-        destination: "/profile",
-        permanent: false,
-      },
+      props: {},
     };
   }
-  return await new Promise((resolve) => resolve({ props: {} }));
+  return {
+    redirect: {
+      destination: "/profile",
+      permanent: false,
+    },
+  };
 };

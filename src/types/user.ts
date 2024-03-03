@@ -1,4 +1,5 @@
 import { Recipe } from "@/types/recipes";
+import { deleteCookie } from "cookies-next";
 
 export interface User {
   _id?: string;
@@ -29,3 +30,5 @@ export interface UserDTO {
 export interface UserList {
   [key: number]: User;
 }
+
+export const isValidId = (id: string) => /[0-9A-F]{24}/i.test(id);

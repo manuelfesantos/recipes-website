@@ -10,7 +10,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Header from "@/components/Header";
-import { UserDTO } from "@/types/user";
+import { isValidId, UserDTO } from "@/types/user";
 import { getCollection } from "@/utils/mongo-db/db-client";
 import { ObjectId } from "mongodb";
 import { buildUserDTOFromDocument } from "@/utils/transformer/document-to-dto";
@@ -18,6 +18,7 @@ import FavoritesButton from "@/components/FavoritesButton";
 import Background from "@/components/Background";
 import process from "process";
 import { buildRecipeFromRecipeDetails } from "@/utils/transformer/recipe-details-to-recipe";
+import { deleteCookie } from "cookies-next";
 
 export default function RecipePage({
   recipe,
@@ -125,6 +126,7 @@ export default function RecipePage({
 export const getServerSideProps: GetServerSideProps = async ({
   query,
   req,
+  res,
 }: GetServerSidePropsContext) => {
   const params = encode(query);
   const wrappedRecipe = getSingleRecipeById(params.slice(3));
@@ -140,11 +142,9 @@ export const getServerSideProps: GetServerSideProps = async ({
       },
     };
   }
-  const collection = await getCollection(
-    String(process.env.USERS_COLLECTION_NAME),
-  );
-  const user = await collection.findOne({ _id: new ObjectId(userId) });
-  if (!user) {
+
+  if (!isValidId(userId)) {
+    res.setHeader("Set-Cookie", `user=deleted; Max-Age=0`);
     return {
       props: {
         recipe,
@@ -152,10 +152,36 @@ export const getServerSideProps: GetServerSideProps = async ({
       },
     };
   }
-  return {
-    props: {
-      recipe,
-      user: buildUserDTOFromDocument(user),
-    },
-  };
+
+  const collection = await getCollection(
+    String(process.env.USERS_COLLECTION_NAME),
+  );
+
+  try {
+    const user = await collection.findOne({ _id: new ObjectId(userId) });
+    if (!user) {
+      res.setHeader("Set-Cookie", `user=deleted; Max-Age=0`);
+      return {
+        props: {
+          recipe,
+          user: null,
+        },
+      };
+    }
+    return {
+      props: {
+        recipe,
+        user: buildUserDTOFromDocument(user),
+      },
+    };
+  } catch (error) {
+    console.log(error);
+    res.setHeader("Set-Cookie", `user=deleted; Max-Age=0`);
+    return {
+      props: {
+        recipe,
+        user: null,
+      },
+    };
+  }
 };

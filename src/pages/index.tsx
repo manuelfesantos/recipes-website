@@ -1,6 +1,6 @@
 import RecipeMain from "@/components/RecipeMain";
 import { GetServerSideProps } from "next";
-import { UserDTO } from "@/types/user";
+import { isValidId, UserDTO } from "@/types/user";
 import { getCollection } from "@/utils/mongo-db/db-client";
 import { ObjectId } from "mongodb";
 import { buildUserDTOFromDocument } from "@/utils/transformer/document-to-dto";
@@ -8,6 +8,7 @@ import Head from "next/head";
 import Header from "@/components/Header";
 import Background from "@/components/Background";
 import process from "process";
+import { deleteCookie } from "cookies-next";
 
 export default function HomePage({ user }: { user: UserDTO | null }) {
   return (
@@ -25,9 +26,19 @@ export default function HomePage({ user }: { user: UserDTO | null }) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const { user: userId } = req.cookies;
   if (!userId) {
+    return {
+      props: {
+        user: null,
+      },
+    };
+  }
+
+  if (!isValidId(userId)) {
+    console.log("Invalid user cookie on recipes page");
+    res.setHeader("Set-Cookie", `user=deleted; Max-Age=0`);
     return {
       props: {
         user: null,
@@ -38,10 +49,30 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const collection = await getCollection(
     String(process.env.USERS_COLLECTION_NAME),
   );
-  const user = await collection.findOne({ _id: new ObjectId(userId) });
-  return {
-    props: {
-      user: buildUserDTOFromDocument(user),
-    },
-  };
+
+  try {
+    const user = await collection.findOne({ _id: new ObjectId(userId) });
+
+    if (!user) {
+      res.setHeader("Set-Cookie", `user=deleted; Max-Age=0`);
+      return {
+        props: {
+          user: null,
+        },
+      };
+    }
+    return {
+      props: {
+        user: buildUserDTOFromDocument(user),
+      },
+    };
+  } catch (error) {
+    console.log(error);
+    res.setHeader("Set-Cookie", `user=deleted; Max-Age=0`);
+    return {
+      props: {
+        user: null,
+      },
+    };
+  }
 };

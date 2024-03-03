@@ -3,12 +3,13 @@ import Header from "@/components/Header";
 import Head from "next/head";
 import { getCollection } from "@/utils/mongo-db/db-client";
 import { ObjectId } from "mongodb";
-import { UserDTO } from "@/types/user";
+import { isValidId, UserDTO } from "@/types/user";
 import { buildUserDTOFromDocument } from "@/utils/transformer/document-to-dto";
 import FavoriteMain from "@/components/FavoriteMain";
 import Background from "@/components/Background";
 import process from "process";
 import { renewRecipeIfNeeded } from "@/utils/edamam-api/recipe-renewal";
+import { deleteCookie } from "cookies-next";
 
 export default function Favorites({ user }: { user: UserDTO }) {
   return (
@@ -26,7 +27,7 @@ export default function Favorites({ user }: { user: UserDTO }) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const { user: userId } = req.cookies;
   if (!userId) {
     return { redirect: { destination: "/login", permanent: false } };
@@ -35,36 +36,62 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     String(process.env.USERS_COLLECTION_NAME),
   );
 
-  const user = await collection.findOne({ _id: new ObjectId(userId) });
-  if (!user) {
-    return { redirect: { destination: "/login", permanent: false } };
-  }
-
-  const userDTO = buildUserDTOFromDocument(user);
-
-  const { recipes } = userDTO;
-
-  if (recipes.length) {
-    for (let i = 0; i < recipes.length; i++) {
-      if (!recipes[i].uri) continue;
-      const newRecipe = await renewRecipeIfNeeded(recipes[i]);
-      if (newRecipe) {
-        recipes[i] = newRecipe;
-      }
-    }
-    await collection.updateOne(
-      { _id: new ObjectId(userId) },
-      {
-        $set: {
-          recipes: recipes,
+  try {
+    const user = await collection.findOne({ _id: new ObjectId(userId) });
+    if (!user) {
+      deleteCookie("user");
+      return {
+        redirect: {
+          destination: "/login",
+          permanent: false,
         },
-      },
-    );
-  }
+      };
+    }
 
-  return {
-    props: {
-      user: userDTO,
-    },
-  };
+    if (!isValidId(userId)) {
+      res.setHeader("Set-Cookie", `user=deleted; Max-Age=0`);
+      return {
+        redirect: {
+          destination: "/login",
+          permanent: false,
+        },
+      };
+    }
+
+    const userDTO = buildUserDTOFromDocument(user);
+
+    const { recipes } = userDTO;
+
+    if (recipes.length) {
+      for (let i = 0; i < recipes.length; i++) {
+        if (!recipes[i].uri) continue;
+        const newRecipe = await renewRecipeIfNeeded(recipes[i]);
+        if (newRecipe) {
+          recipes[i] = newRecipe;
+        }
+      }
+      await collection.updateOne(
+        { _id: new ObjectId(userId) },
+        {
+          $set: {
+            recipes: recipes,
+          },
+        },
+      );
+    }
+    return {
+      props: {
+        user: userDTO,
+      },
+    };
+  } catch (error) {
+    console.log(error);
+    deleteCookie("user");
+    return {
+      redirect: {
+        destination: "/profile",
+        permanent: false,
+      },
+    };
+  }
 };
