@@ -40,9 +40,7 @@ export const getSingleRecipeById = async (
   id: string,
 ): Promise<RecipeDetails> => {
   const apiResponse = fetch(buildHrefFromRecipeId(id), requestOptions);
-  return await new Promise((resolve) =>
-    resolve(parseResponse(apiResponse) as Promise<RecipeDetails>),
-  );
+  return (await parseResponse(apiResponse)) as RecipeDetails;
 };
 
 const getRandomAppConfig = (): AppConfig =>

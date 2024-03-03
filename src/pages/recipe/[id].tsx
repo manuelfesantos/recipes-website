@@ -13,10 +13,11 @@ import Header from "@/components/Header";
 import { UserDTO } from "@/types/user";
 import { getCollection } from "@/utils/mongo-db/db-client";
 import { ObjectId } from "mongodb";
-import { buildUserDTOFromDocument } from "@/utils/transformer/documentToDTO";
+import { buildUserDTOFromDocument } from "@/utils/transformer/document-to-dto";
 import FavoritesButton from "@/components/FavoritesButton";
 import Background from "@/components/Background";
 import process from "process";
+import { buildRecipeFromRecipeDetails } from "@/utils/transformer/recipe-details-to-recipe";
 
 export default function RecipePage({
   recipe,
@@ -36,7 +37,7 @@ export default function RecipePage({
       console.log("adding recipe");
       const userToSave: UserDTO = {
         ...user,
-        recipes: [...user.recipes, recipe],
+        recipes: [...user.recipes, buildRecipeFromRecipeDetails(recipe)],
       };
       await updateUser(userToSave);
     }
@@ -128,6 +129,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   const params = encode(query);
   const wrappedRecipe = getSingleRecipeById(params.slice(3));
   const recipe = (await wrappedRecipe).recipe as RecipeDetails;
+  console.log(recipe);
 
   const { user: userId } = req.cookies;
   if (!userId) {

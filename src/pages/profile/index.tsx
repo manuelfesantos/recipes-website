@@ -6,7 +6,7 @@ import { GetServerSideProps } from "next";
 import { deleteCookie } from "cookies-next";
 import { getCollection } from "@/utils/mongo-db/db-client";
 import { ObjectId } from "mongodb";
-import { buildUserDTOFromDocument } from "@/utils/transformer/documentToDTO";
+import { buildUserDTOFromDocument } from "@/utils/transformer/document-to-dto";
 import Link from "next/link";
 import styles from "@/styles/ProfilePage.module.css";
 import { useState } from "react";
