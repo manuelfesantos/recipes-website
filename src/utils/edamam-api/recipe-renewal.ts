@@ -1,5 +1,4 @@
 import { getSingleRecipeById } from "@/utils/edamam-api/api-client";
-import { buildRecipeFromRecipeDetails } from "@/utils/transformer/recipe-details-to-recipe";
 import { idFromUri, Recipe } from "@/types/recipes";
 
 const isImageValid = async (image: string) => {

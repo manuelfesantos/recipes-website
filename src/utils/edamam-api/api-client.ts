@@ -1,7 +1,6 @@
 import { RecipeDetails, RecipeListResponse } from "@/types/recipes";
 import { AppConfig } from "@/types/app-config";
 import process from "process";
-import { checkImageValidity } from "@/utils/edamam-api/recipe-renewal";
 
 const requestOptions: RequestInit = {
   method: "GET",
