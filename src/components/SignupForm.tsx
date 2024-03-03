@@ -56,13 +56,13 @@ export default function SignupForm({ handleSignup }: Props) {
     setPasswordsMatch(true);
     setUserValid(true);
     const user: User = {
-      username: username.current.value,
-      password: password.current.value,
+      email: email.current.value,
       firstName: firstName.current.value,
       imageUrl: "",
       lastName: lastName.current.value,
-      email: email.current.value,
+      password: password.current.value,
       recipes: [],
+      username: username.current.value,
     };
     const responsePromise = await handleSignup(user);
 
@@ -76,22 +76,19 @@ export default function SignupForm({ handleSignup }: Props) {
     }
   };
 
-  const formIsFilled = () => {
-    return (
-      username.current?.value &&
-      password.current?.value &&
-      password2.current?.value &&
-      email.current?.value &&
-      firstName.current?.value &&
-      lastName.current?.value
-    );
-  };
+  const formIsFilled = () =>
+    username.current?.value &&
+    password.current?.value &&
+    password2.current?.value &&
+    email.current?.value &&
+    firstName.current?.value &&
+    lastName.current?.value;
 
-  const emailIsValid = () => {
-    return email.current?.value.match(
-      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+  const emailIsValid = () =>
+    email.current &&
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+      email.current.value,
     );
-  };
 
   return (
     <form className={styles.loginForm}>

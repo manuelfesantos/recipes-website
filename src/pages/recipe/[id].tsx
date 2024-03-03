@@ -59,9 +59,9 @@ export default function RecipePage({
     const headers = new Headers();
     headers.append("property", "recipes");
     const responsePromise = await fetch(`/api/users/${userToSave._id}`, {
-      method: "PUT",
       body: JSON.stringify(userToSave),
       headers: headers,
+      method: "PUT",
     });
 
     const response = await responsePromise.json();
@@ -70,11 +70,8 @@ export default function RecipePage({
     }
   };
 
-  const isFavorite = () => {
-    return (
-      user?.recipes.some((userRecipe) => userRecipe.uri === recipe.uri) ?? false
-    );
-  };
+  const isFavorite = () =>
+    user?.recipes.some((userRecipe) => userRecipe.uri === recipe.uri) ?? false;
 
   return (
     <>
@@ -86,7 +83,7 @@ export default function RecipePage({
       </Head>
       <Header />
       <div className={styles.recipeDiv}>
-        <RecipeProfile title={recipe.label} image={recipe.image} />
+        <RecipeProfile title={recipe.label} />
         <div className={styles.recipeData}>
           <Image
             className={styles.img}

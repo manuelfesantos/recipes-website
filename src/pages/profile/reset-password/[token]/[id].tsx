@@ -33,8 +33,8 @@ export default function ResetPassword({ token, id }: Props) {
     const requestBody = { password, verifyPassword };
 
     const responsePromise = await fetch(`/api/reset/${token}/${id}`, {
-      method: "POST",
       body: JSON.stringify(requestBody),
+      method: "POST",
     });
 
     const response = await responsePromise.json();
@@ -90,8 +90,8 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
   return {
     props: {
-      token: token,
       id: id,
+      token: token,
     },
   };
 };

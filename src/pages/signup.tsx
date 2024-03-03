@@ -11,9 +11,9 @@ export default function Signup() {
     const headers = new Headers();
     headers.append("action", "signup");
     return await fetch("/api/users", {
-      method: "POST",
       body: JSON.stringify(user),
       headers: headers,
+      method: "POST",
     });
   };
 
@@ -34,7 +34,7 @@ export default function Signup() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const { user } = req.cookies;
   if (user) {
     return {
@@ -44,5 +44,5 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
       },
     };
   }
-  return { props: {} };
+  return await new Promise((resolve) => resolve({ props: {} }));
 };

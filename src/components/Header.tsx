@@ -14,24 +14,27 @@ export default function Header() {
   }, []);
 
   return (
-    <div className={styles.header}>
-      <ul className={styles.navBar}>
-        <li>
-          <Link href={"/"}>Recipes</Link>
-        </li>
-        <li>
-          <Link href={"/about"}>About</Link>
-        </li>
-        {isLoggedIn ? (
+    <>
+      <div className={styles.headerTop}></div>
+      <div className={styles.header}>
+        <ul className={styles.navBar}>
           <li>
-            <Link href={"/profile"}>Profile</Link>
+            <Link href={"/"}>Recipes</Link>
           </li>
-        ) : (
           <li>
-            <Link href={"/login"}>Login</Link>
+            <Link href={"/about"}>About</Link>
           </li>
-        )}
-      </ul>
-    </div>
+          {isLoggedIn ? (
+            <li>
+              <Link href={"/profile"}>Profile</Link>
+            </li>
+          ) : (
+            <li>
+              <Link href={"/login"}>Login</Link>
+            </li>
+          )}
+        </ul>
+      </div>
+    </>
   );
 }

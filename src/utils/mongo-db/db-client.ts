@@ -1,16 +1,13 @@
 import * as process from "process";
 import { Collection, MongoClient, ServerApiVersion } from "mongodb";
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@recipescluster.vafilbz.mongodb.net/?retryWrites=true&w=majority`;
-
-const client = new MongoClient(uri, {
+const client = new MongoClient(String(process.env.DB_URI), {
   serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
     deprecationErrors: true,
+    strict: true,
+    version: ServerApiVersion.v1,
   },
 });
-
 export const getCollection = async (
   collectionName: string,
 ): Promise<Collection> => {

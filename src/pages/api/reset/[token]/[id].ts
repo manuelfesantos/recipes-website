@@ -43,15 +43,15 @@ const validateBody = (
 
   if (!("password" in parsedBody) || !("verifyPassword" in parsedBody)) {
     res.json({
-      status: 400,
       message: "Please provide both password and verifyPassword fields",
+      status: 400,
     });
     return null;
   }
   const { password, verifyPassword } = parsedBody;
 
   if (password !== verifyPassword) {
-    res.json({ status: 400, message: "Passwords do not match" });
+    res.json({ message: "Passwords do not match", status: 400 });
     return null;
   }
 
@@ -88,8 +88,8 @@ export default async function handler(
 ) {
   if (req.method !== "POST") {
     res.json({
-      status: 405,
       message: `Unable to process ${req.method} request. Please use POST`,
+      status: 405,
     });
     return;
   }
@@ -107,14 +107,14 @@ export default async function handler(
     const user = await getUser(String(id));
 
     if (!user) {
-      res.json({ status: 400, message: "Please provide a valid id" });
+      res.json({ message: "Please provide a valid id", status: 400 });
       return;
     }
 
     const tokenError = await validateToken(String(token), String(id));
 
     if (tokenError) {
-      res.json({ status: 400, message: tokenError.message });
+      res.json({ message: tokenError.message, status: 400 });
       return;
     }
 
@@ -122,12 +122,12 @@ export default async function handler(
 
     if (passwordChanged) {
       res.json({
-        status: 202,
         message:
           "Password changed successfully. Please login again to access your account.",
+        status: 202,
       });
     }
   } catch (error: any) {
-    res.json({ status: 500, message: error.message });
+    res.json({ message: error.message, status: 500 });
   }
 }

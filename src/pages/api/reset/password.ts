@@ -7,12 +7,12 @@ import { ObjectId } from "mongodb";
 const validateBody = (username: string, email: string) => {
   const usernameIsAlphaNumeric = /^[A-Za-z0-9]*$/.test(username);
   if (!usernameIsAlphaNumeric) {
-    return { status: 400, message: "Please provide a valid username" };
+    return { message: "Please provide a valid username", status: 400 };
   }
   const emailIsEmailPattern =
     /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
   if (!emailIsEmailPattern) {
-    return { status: 400, message: "Please provide a valid email" };
+    return { message: "Please provide a valid email", status: 400 };
   }
 
   return null;
@@ -42,9 +42,9 @@ const saveTokenAndId = async (token: any, id: ObjectId) => {
     String(process.env.TOKENS_COLLECTION_NAME),
   );
   const insertResult = await collection.insertOne({
+    date: Date.now(),
     token: token,
     userId: id,
-    date: Date.now(),
   });
   return insertResult.acknowledged;
 };
@@ -54,8 +54,8 @@ export default async function handler(
 ) {
   if (req.method !== "POST") {
     res.json({
-      status: 405,
       message: `Unable to process ${req.method} request. Please use POST`,
+      status: 405,
     });
     return;
   }
@@ -71,7 +71,7 @@ export default async function handler(
 
     const userId = await validateUser(username, email);
     if (!userId) {
-      res.json({ status: 404, message: "Username and email don't match" });
+      res.json({ message: "Username and email don't match", status: 404 });
       return;
     }
 
@@ -81,22 +81,22 @@ export default async function handler(
 
     if (!tokenCreated) {
       res.json({
-        status: 500,
         message: "There was an error generating your token... please try again",
+        status: 500,
       });
     }
 
     const response = await resend.emails.send({
       from: "Manuel <recipes@resend.dev>",
-      text: `Hi ${username}!  You can change your password following this link: http://localhost:3000/profile/reset-password/${token}/${userId}`,
       subject: "Password Reset",
+      text: `Hi ${username}!  You can change your password following this link: http://localhost:3000/profile/reset-password/${token}/${userId}`,
       to: email,
     });
     if (response.error) {
       console.log(response.error);
       res.json({
-        status: 500,
         message: "there was a problem sending your email... please try again",
+        status: 500,
       });
     } else {
       console.log(response.data);
@@ -104,9 +104,9 @@ export default async function handler(
     }
   } catch (error) {
     res.json({
-      status: 500,
       message:
         "There was a problem while processing your request. Please try again",
+      status: 500,
     });
   }
 }

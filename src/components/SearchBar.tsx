@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import styles from "@/styles/SearchBar.module.css";
 interface Props {
-  loadRecipes: (searchText: string) => void;
+  loadRecipes: (searchText: string) => Promise<void>;
 }
 
 export default function SearchBar({ loadRecipes }: Props) {
@@ -9,7 +9,7 @@ export default function SearchBar({ loadRecipes }: Props) {
   const searchRecipes = async () => {
     if (searchInput.current) {
       const searchText = searchInput.current.value;
-      loadRecipes(searchText);
+      await loadRecipes(searchText);
     }
   };
 

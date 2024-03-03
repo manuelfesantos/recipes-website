@@ -20,8 +20,7 @@ export default async function handler(
 
   switch (req.method) {
     case "POST":
-      const bcrypt = require("bcrypt");
-
+      console.log("POST request to users endpoint");
       const action = `${req.headers.action}`;
 
       const parsedBody = JSON.parse(req.body ?? "");
@@ -32,15 +31,17 @@ export default async function handler(
 
       switch (action) {
         case "signup":
+          console.log("Signup selected");
           const alreadyExists = Boolean(userToValidate);
           if (alreadyExists) {
             res.json({ status: 400 });
           } else {
+            console.log("Encrypting password...");
             const encryptedPassword = encryptPassword(parsedBody.password);
             if (!encryptedPassword) {
               res.json({
-                status: 500,
                 message: "There was a problem encrypting the password",
+                status: 500,
               });
               return;
             }
@@ -61,10 +62,13 @@ export default async function handler(
           }
           break;
         case "login":
+          console.log("Login selected");
           if (!userToValidate) {
             res.json({ status: 404 });
             return;
           }
+
+          console.log("Checking if passwords match...");
 
           const passwordsMatch = comparePasswords(
             parsedBody.password,
@@ -81,10 +85,11 @@ export default async function handler(
       break;
 
     case "GET":
+      console.log("Getting all users...");
       const allUsers = await collection.find().toArray();
       const userDTOs = allUsers.map((user) => ({
-        username: user.username,
         recipes: user.recipes,
+        username: user.username,
       }));
       res.json(
         allUsers

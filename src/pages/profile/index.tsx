@@ -33,8 +33,8 @@ export default function ProfilePage({ user }: { user: UserDTO }) {
     formData.append("picture", file);
 
     const response = await fetch(`/api/pictures?name=${fileName}`, {
-      method: "PUT",
       body: formData,
+      method: "PUT",
     });
 
     const newImageUrl = `https://floral-hill-5d85.manuelfesantos.workers.dev/${fileName}`;
@@ -49,9 +49,9 @@ export default function ProfilePage({ user }: { user: UserDTO }) {
       headers.append("property", "imageUrl");
 
       await fetch(`/api/users/${user._id}`, {
-        method: "PUT",
-        headers: headers,
         body: JSON.stringify(userDTO),
+        headers: headers,
+        method: "PUT",
       });
 
       router.reload();
@@ -92,7 +92,7 @@ export default function ProfilePage({ user }: { user: UserDTO }) {
             id={"picture"}
             type={"file"}
             onChange={(event) => changeProfilePic(event.target.files)}
-            style={{ visibility: "hidden", position: "absolute" }}
+            style={{ position: "absolute", visibility: "hidden" }}
             accept={"image/jpeg"}
           />
           <Link

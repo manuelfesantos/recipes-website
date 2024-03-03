@@ -1,3 +1,22 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "block-spacing": "warn",
+    "eqeqeq": "error",
+    "require-await": "error",
+    "sort-keys": "warn",
+    "array-bracket-spacing": "error",
+    "arrow-body-style": "error",
+    "brace-style": "error",
+    "func-names": "error",
+    "no-unreachable": "error",
+    "no-else-return": "error",
+    "jsx-quotes": "warn",
+    "func-style": "warn",
+    "no-duplicate-imports": "error",
+    "no-empty": "error",
+    "no-var": "error",
+    "no-useless-return": "error",
+    "no-unused-expressions": "error"
+  }
 }

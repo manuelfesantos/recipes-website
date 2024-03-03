@@ -35,9 +35,9 @@ export default function FavoriteMain({ user }: Props) {
     const headers = new Headers();
     headers.append("property", "recipes");
     const responsePromise = await fetch(`/api/users/${userToSave._id}`, {
-      method: "PUT",
       body: JSON.stringify(userToSave),
       headers: headers,
+      method: "PUT",
     });
 
     const response = await responsePromise.json();

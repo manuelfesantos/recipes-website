@@ -6,7 +6,7 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   if (req.method !== "GET") {
-    res.json({ status: 405, message: "Method not allowed" });
+    res.json({ message: "Method not allowed", status: 405 });
     return;
   }
 
@@ -14,8 +14,8 @@ export default async function handler(
 
   try {
     const recipes = await getRecipesBySearchWord(searchWord);
-    res.json({ status: 200, recipes });
+    res.json({ recipes, status: 200 });
   } catch (err) {
-    res.json({ status: 500, err });
+    res.json({ err, status: 500 });
   }
 }

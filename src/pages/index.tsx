@@ -6,7 +6,6 @@ import { ObjectId } from "mongodb";
 import { buildUserDTOFromDocument } from "@/utils/transformer/documentToDTO";
 import Head from "next/head";
 import Header from "@/components/Header";
-import styles from "@/styles/HomePage.module.css";
 import Background from "@/components/Background";
 import process from "process";
 

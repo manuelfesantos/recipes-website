@@ -21,9 +21,8 @@ const baseEndpoint = "https://www.edamam.com/api/recipes/v2";
 
 export const getRecipesBySearchWord = async (
   searchWord: string,
-): Promise<RecipeListResponse> => {
-  return getRecipesByHref(buildHrefFromSearchWord(searchWord));
-};
+): Promise<RecipeListResponse> =>
+  await getRecipesByHref(buildHrefFromSearchWord(searchWord));
 
 export const getRecipesByHref = async (
   href: string,
@@ -32,14 +31,18 @@ export const getRecipesByHref = async (
   const newHref = replaceAppConfigs(href, appConfig);
   console.log(`new href: ${newHref}`);
   const apiResponse = fetch(newHref, requestOptions);
-  return parseResponse(apiResponse) as Promise<RecipeListResponse>;
+  return await new Promise((resolve) =>
+    resolve(parseResponse(apiResponse) as Promise<RecipeListResponse>),
+  );
 };
 
 export const getSingleRecipeById = async (
   id: string,
 ): Promise<RecipeDetails> => {
   const apiResponse = fetch(buildHrefFromRecipeId(id), requestOptions);
-  return parseResponse(apiResponse) as Promise<RecipeDetails>;
+  return await new Promise((resolve) =>
+    resolve(parseResponse(apiResponse) as Promise<RecipeDetails>),
+  );
 };
 
 const getRandomAppConfig = (): AppConfig =>
@@ -67,14 +70,11 @@ const replaceAppConfigs = (href: string, appConfig: AppConfig): string => {
     .replace(appConfig.appKey, newAppConfig.appKey);
 };
 
-const findQueryParam = (query: string, paramTitle: string): string => {
-  return (
-    query
-      .split("&")
-      .find((field) => field.startsWith(paramTitle))
-      ?.split("=")[1] ?? ""
-  );
-};
+const findQueryParam = (query: string, paramTitle: string): string =>
+  query
+    .split("&")
+    .find((field) => field.startsWith(paramTitle))
+    ?.split("=")[1] ?? "";
 
 const buildHrefFromRecipeId = (id: string): string => {
   const appConfig = getRandomAppConfig();

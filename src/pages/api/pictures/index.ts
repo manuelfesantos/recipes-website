@@ -20,9 +20,9 @@ router.put(async (req, res) => {
   console.log(req.file);
 
   const response = await fetch(url, {
-    method: "PUT",
     body: req.file.buffer,
     headers: headers,
+    method: "PUT",
   });
 
   console.log(response.status);
@@ -33,8 +33,8 @@ router.put(async (req, res) => {
     const fileName = fileNameArray.join("");
 
     res.json({
-      status: 200,
       message: `${fileName} uploaded successfully`,
+      status: 200,
     });
   } else {
     res.json({ status: 500 });

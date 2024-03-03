@@ -5,7 +5,7 @@ import { UserCredentials } from "@/types/user";
 import { setCookie } from "cookies-next";
 
 interface Props {
-  handleLogin: (credentials: UserCredentials) => Promise<Response>;
+  handleLogin: (userCredentials: UserCredentials) => Promise<Response>;
 }
 
 export default function LoginForm({ handleLogin }: Props) {
@@ -30,8 +30,8 @@ export default function LoginForm({ handleLogin }: Props) {
     setFormValid(true);
 
     const userCredentials: UserCredentials = {
-      username: username.current.value,
       password: password.current.value,
+      username: username.current.value,
     };
 
     const responsePromise = await handleLogin(userCredentials);
@@ -85,7 +85,7 @@ export default function LoginForm({ handleLogin }: Props) {
           {"Don't have an account?"}
         </h3>
         <h3 onClick={() => router.push("/profile/reset-password")}>
-          {"Forgot you password?"}
+          {"Forgot your password?"}
         </h3>
       </div>
       {!formValid && formFilled && (

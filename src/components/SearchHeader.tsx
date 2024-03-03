@@ -2,7 +2,7 @@ import SearchBar from "@/components/SearchBar";
 import styles from "@/styles/SearchHeader.module.css";
 
 interface Props {
-  handleLoadRecipes: (searchText: string) => void;
+  handleLoadRecipes: (searchText: string) => Promise<void>;
 }
 
 export default function SearchHeader({ handleLoadRecipes }: Props) {

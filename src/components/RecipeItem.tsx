@@ -43,7 +43,7 @@ export default function RecipeItem({
   const isUserFavorite = () => {
     if (user && user.recipes)
       return user.recipes.some((userRecipe) => userRecipe.uri === recipe.uri);
-    else return false;
+    return false;
   };
 
   const saveCurrentRecipe = () => {
@@ -54,7 +54,7 @@ export default function RecipeItem({
     if (user) {
       setFavorite(isUserFavorite());
     }
-  }, [user, recipe]);
+  }, [user]);
   return (
     <div className={styles.recipeCard}>
       <Link

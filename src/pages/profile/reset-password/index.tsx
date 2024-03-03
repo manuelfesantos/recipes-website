@@ -37,18 +37,18 @@ export default function ForgotPassword() {
     const emailIsEmailPattern =
       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailValue);
     setValidUsername(usernameIsAlphaNumeric);
-    setValidEmail((prevState) => emailIsEmailPattern);
+    setValidEmail(emailIsEmailPattern);
     if (!usernameIsAlphaNumeric || !emailIsEmailPattern) return;
 
     setLoading(true);
 
     const requestBody = {
-      username: usernameValue,
       email: emailValue,
+      username: usernameValue,
     };
     const responsePromise = await fetch("/api/reset/password", {
-      method: "POST",
       body: JSON.stringify(requestBody),
+      method: "POST",
     });
 
     const response = await responsePromise.json();
