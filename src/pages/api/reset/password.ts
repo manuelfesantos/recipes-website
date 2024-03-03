@@ -3,6 +3,7 @@ import { resend } from "@/utils/resend/resend";
 import { getCollection } from "@/utils/mongo-db/db-client";
 import process from "process";
 import { ObjectId } from "mongodb";
+import { sendMail } from "@/utils/sendgrid/sendgrid";
 
 const validateBody = (username: string, email: string) => {
   const usernameIsAlphaNumeric = /^[A-Za-z0-9]*$/.test(username);
@@ -48,6 +49,18 @@ const saveTokenAndId = async (token: any, id: ObjectId) => {
   });
   return insertResult.acknowledged;
 };
+
+const createAndSendEmail = async (
+  username: string,
+  token: string,
+  userId: ObjectId,
+  email: string,
+) => {
+  const text = `Hi ${username}!  You can change your password following this link: ${process.env.WEBSITE_URL}/profile/reset-password/${token}/${userId}`;
+  const subject = "Reset Password";
+
+  return await sendMail(text, email, subject);
+};
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
@@ -86,22 +99,14 @@ export default async function handler(
       });
     }
 
-    const response = await resend.emails.send({
-      from: "Manuel <recipes@resend.dev>",
-      subject: "Password Reset",
-      text: `Hi ${username}!  You can change your password following this link: http://localhost:3000/profile/reset-password/${token}/${userId}`,
-      to: email,
+    const [response] = await createAndSendEmail(username, token, userId, email);
+
+    console.log("Email status code: ", response.statusCode);
+
+    res.json({
+      message: JSON.stringify(response.body),
+      status: response.statusCode,
     });
-    if (response.error) {
-      console.log(response.error);
-      res.json({
-        message: "there was a problem sending your email... please try again",
-        status: 500,
-      });
-    } else {
-      console.log(response.data);
-      res.json({ status: 200 });
-    }
   } catch (error) {
     res.json({
       message:
