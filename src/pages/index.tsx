@@ -3,7 +3,7 @@ import { GetServerSideProps } from "next";
 import { UserDTO } from "@/types/user";
 import { getCollection } from "@/utils/mongo-db/db-client";
 import { ObjectId } from "mongodb";
-import { buildUserDTOFromDocument } from "@/utils/transformer/documentToDTO";
+import { buildUserDTOFromDocument } from "@/utils/transformer/document-to-dto";
 import Head from "next/head";
 import Header from "@/components/Header";
 import Background from "@/components/Background";

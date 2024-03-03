@@ -1,5 +1,5 @@
 import RecipeItem from "@/components/RecipeItem";
-import { Recipe } from "@/types/recipes";
+import { idFromUri, Recipe } from "@/types/recipes";
 import styles from "@/styles/RecipeList.module.css";
 import { UserDTO } from "@/types/user";
 
@@ -29,7 +29,7 @@ export default function RecipeList({
             uri: recipe.uri,
             yield: recipe.yield,
           }}
-          key={recipe.uri.slice(51)}
+          key={idFromUri(recipe.uri)}
           user={user}
           addToFavorites={(recipe) => handleAddFavorite(recipe)}
           removeFromFavorites={(recipe) => handleRemoveFavorite(recipe)}

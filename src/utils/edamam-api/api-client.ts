@@ -1,6 +1,7 @@
 import { RecipeDetails, RecipeListResponse } from "@/types/recipes";
 import { AppConfig } from "@/types/app-config";
 import process from "process";
+import { checkImageValidity } from "@/utils/edamam-api/recipe-renewal";
 
 const requestOptions: RequestInit = {
   method: "GET",
@@ -40,9 +41,7 @@ export const getSingleRecipeById = async (
   id: string,
 ): Promise<RecipeDetails> => {
   const apiResponse = fetch(buildHrefFromRecipeId(id), requestOptions);
-  return await new Promise((resolve) =>
-    resolve(parseResponse(apiResponse) as Promise<RecipeDetails>),
-  );
+  return (await parseResponse(apiResponse)) as RecipeDetails;
 };
 
 const getRandomAppConfig = (): AppConfig =>
