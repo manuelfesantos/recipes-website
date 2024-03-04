@@ -1,3 +1,57 @@
-.aboutDiv {
+.mainDiv {
+    width: 100vw;
+    height: var(--screen-height);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 
+.aboutDiv {
+    max-width: 90%;
+    background-color: var(--secondary-dark);
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    color: var(--primary-dark);
+    text-align: center;
+}
+
+.light {
+    font-weight: lighter;
+}
+
+.strong {
+    font-weight: bold;
+}
+
+.profilePic {
+    width: 300px;
+    max-width: 100%;
+    height: 300px;
+    border-radius: 20px;
+    background-image: url("/profile-pic.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.aboutDiv strong {
+    text-decoration: none;
+    color: var(--primary-light);
+    font-weight: bolder;
+}
+
+.links {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.aboutDiv img {
+    height: 50px;
+    width: 50px;
 }
