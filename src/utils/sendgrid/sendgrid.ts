@@ -1,5 +1,4 @@
 import sgMail from "@sendgrid/mail";
-import { text } from "@fortawesome/fontawesome-svg-core";
 import process from "process";
 
 sgMail.setApiKey(String(process.env.SENDGRID_API_KEY));

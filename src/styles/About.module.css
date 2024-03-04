@@ -1,13 +1,13 @@
 .mainDiv {
     width: 100vw;
-    height: var(--screen-height);
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
+    margin-bottom: 20px;
 }
 
 .aboutDiv {
+    margin-top: 30px;
     max-width: 90%;
     background-color: var(--secondary-dark);
     border-radius: 20px;
