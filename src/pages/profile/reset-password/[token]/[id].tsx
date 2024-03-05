@@ -19,6 +19,7 @@ export default function ResetPassword({ token, id }: Props) {
   const [status, setStatus] = useState<string>("");
   const [success, setSuccess] = useState<boolean>(false);
   const [showingPasswords, setShowingPasswords] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   useState<boolean>(false);
   const router = useRouter();
 
@@ -37,18 +38,22 @@ export default function ResetPassword({ token, id }: Props) {
 
     const requestBody = { password, verifyPassword };
 
+    setLoading(true);
+    setStatus("Changing your password...");
     const responsePromise = await fetch(`/api/reset/${token}/${id}`, {
       body: JSON.stringify(requestBody),
       method: "POST",
     });
 
     const response = await responsePromise.json();
-
     setStatus(response.message);
 
     if (response.status === 202) {
       setSuccess(true);
+      return;
     }
+
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -96,6 +101,7 @@ export default function ResetPassword({ token, id }: Props) {
             className={styles.button}
             type={"button"}
             onClick={changePassword}
+            disabled={loading || success}
           >
             Change Password
           </button>
