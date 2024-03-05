@@ -103,8 +103,18 @@ export default async function handler(
 
     console.log("Email status code: ", response.statusCode);
 
+    if (response.statusCode !== 202) {
+      res.json({
+        message: "There was an error sending your email... please try again",
+        status: 500,
+      });
+
+      return;
+    }
+
     res.json({
-      message: JSON.stringify(response.body),
+      message:
+        "Email sent successfully! Please wait up to 5 minutes to receive it in your inbox",
       status: response.statusCode,
     });
   } catch (error) {

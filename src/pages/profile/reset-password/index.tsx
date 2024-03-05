@@ -1,6 +1,8 @@
 import styles from "@/styles/ForgotPassword.module.css";
 import { useRef, useState } from "react";
 import Header from "@/components/Header";
+import Background from "@/components/Background";
+import { useRouter } from "next/router";
 
 export default function ForgotPassword() {
   const username = useRef<HTMLInputElement>(null);
@@ -12,6 +14,7 @@ export default function ForgotPassword() {
   const [resetSucceeded, setResetSucceeded] = useState<boolean>(false);
   const [resetFailed, setResetFailed] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const router = useRouter();
 
   const resetFormStates = () => {
     setFormValid(true);
@@ -64,35 +67,58 @@ export default function ForgotPassword() {
   return (
     <>
       <Header />
-      <div className={styles.headersDiv}>
-        <h1 className={styles.mainHeader}>Forgot your password?</h1>
-        <h2 className={styles.secondHeader}>
-          {"Don't worry, we've all been through that"}
-        </h2>
-        <h3 className={styles.thirdHeader}>
-          Please enter your username and email address
-        </h3>
-        <h3 className={styles.thirdHeader}>
-          so that we can help you to reset your password
-        </h3>
+      <div className={styles.mainDiv}>
+        <div className={styles.centerDiv}>
+          <div className={styles.headersDiv}>
+            <h2>Forgot your password?</h2>
+            <p>{"Don't worry, we've all been through that"}</p>
+            <p>
+              Please enter your username and email address so that we can help
+              you to reset your password
+            </p>
+          </div>
+          <form className={styles.form}>
+            <div className={styles.formField}>
+              <label>Username</label>
+              <input
+                placeholder={"Enter your username"}
+                className={styles.input}
+                type={"text"}
+                id={"username"}
+                ref={username}
+              />
+            </div>
+            <div className={styles.formField}>
+              <label>Email</label>
+              <input
+                placeholder={"Enter your email"}
+                className={styles.input}
+                type={"email"}
+                id={"email"}
+                ref={email}
+              />
+            </div>
+            <button type={"button"} onClick={sendResetEmail}>
+              Send Email
+            </button>
+            {!formValid && <p>Please fill all fields of the form</p>}
+            {!validUsername && <p>Please provide a valid username</p>}
+            {!validEmail && <p>Please provide a valid email</p>}
+            {isLoading && <p>Please wait while we process your request...</p>}
+            {resetSucceeded && (
+              <p>Email was sent successfully! Please check your inbox</p>
+            )}
+            {resetFailed && <p>{`${errorMessage}`}</p>}
+            <h3
+              className={styles.back}
+              onClick={async () => await router.push("/login")}
+            >
+              Back to login
+            </h3>
+          </form>
+        </div>
       </div>
-      <form>
-        <label>Username</label>
-        <input type={"text"} id={"username"} ref={username} />
-        <label>Email</label>
-        <input type={"email"} id={"email"} ref={email} />
-        <button type={"button"} onClick={sendResetEmail}>
-          Send Email
-        </button>
-        {!formValid && <p>Please fill all fields of the form</p>}
-        {!validUsername && <p>Please provide a valid username</p>}
-        {!validEmail && <p>Please provide a valid email</p>}
-        {isLoading && <p>Please wait while we process your request...</p>}
-        {resetSucceeded && (
-          <p>Email was sent successfully! Please check your inbox</p>
-        )}
-        {resetFailed && <p>{`${errorMessage}`}</p>}
-      </form>
+      <Background />
     </>
   );
 }
