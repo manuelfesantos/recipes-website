@@ -2,10 +2,12 @@ import { GetServerSideProps } from "next";
 import { encode } from "querystring";
 import { getCollection } from "@/utils/mongo-db/db-client";
 import process from "process";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { minutesPassed } from "@/utils/time/time";
 import { useRouter } from "next/router";
 import Header from "@/components/Header";
+import styles from "@/styles/ResetPassword.module.css";
+import Background from "@/components/Background";
 
 interface Props {
   token: string | null;
@@ -15,6 +17,9 @@ export default function ResetPassword({ token, id }: Props) {
   const passwordRef = useRef<HTMLInputElement>(null);
   const verifyPasswordRef = useRef<HTMLInputElement>(null);
   const [status, setStatus] = useState<string>("");
+  const [success, setSuccess] = useState<boolean>(false);
+  const [showingPasswords, setShowingPasswords] = useState<boolean>(false);
+  useState<boolean>(false);
   const router = useRouter();
 
   const changePassword = async () => {
@@ -39,29 +44,65 @@ export default function ResetPassword({ token, id }: Props) {
 
     const response = await responsePromise.json();
 
-    if (response.status === 202) {
-      await router.push("/login");
-    }
     setStatus(response.message);
+
+    if (response.status === 202) {
+      setSuccess(true);
+    }
   };
+
+  useEffect(() => {
+    if (success) {
+      setTimeout(async () => {
+        await router.push("/login");
+      }, 3000);
+    }
+  }, [success, router]);
 
   return (
     <>
       <Header />
-      <form>
-        <label htmlFor={"password"}> New Password</label>
-        <input type={"password"} ref={passwordRef} id={"password"} />
-        <label htmlFor={"verifyPassword"}>Verify Password</label>
-        <input
-          type={"password"}
-          id={"verifyPassword"}
-          ref={verifyPasswordRef}
-        />
-        <button type={"button"} onClick={changePassword}>
-          Change Password
-        </button>
-        <p>{status}</p>
-      </form>
+      <div className={styles.mainDiv}>
+        <form>
+          <h1 className={styles.title}>Reset Password</h1>
+          <div className={styles.formField}>
+            <label htmlFor={"password"}> New Password</label>
+            <input
+              placeholder={"Enter your new password"}
+              className={styles.input}
+              type={showingPasswords ? "text" : "password"}
+              ref={passwordRef}
+              id={"password"}
+            />
+          </div>
+          <div className={styles.formField}>
+            <label htmlFor={"verifyPassword"}>Verify Password</label>
+            <input
+              placeholder={"Verify your new password"}
+              className={styles.input}
+              type={showingPasswords ? "text" : "password"}
+              id={"verifyPassword"}
+              ref={verifyPasswordRef}
+            />
+          </div>
+          <button
+            className={styles.button}
+            type={"button"}
+            onClick={() => setShowingPasswords(!showingPasswords)}
+          >
+            {showingPasswords ? "Hide Passwords" : "Show Passwords"}
+          </button>
+          <button
+            className={styles.button}
+            type={"button"}
+            onClick={changePassword}
+          >
+            Change Password
+          </button>
+          <p>{status}</p>
+        </form>
+      </div>
+      <Background />
     </>
   );
 }

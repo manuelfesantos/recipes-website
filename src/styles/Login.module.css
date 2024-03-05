@@ -1,7 +1,7 @@
 .loginDiv {
     display: flex;
     width: 100vw;
-    height: 100vh;
+    height: var(--screen-height);
     align-items: center;
     justify-content: center;
     color: var(--primary-light);
@@ -132,7 +132,7 @@ display: flex;
 @media screen and (max-width: 600px){
 
     .loginMessage {
-        bottom: 145px;
+        bottom: 125px;
     }
 
     .options {
