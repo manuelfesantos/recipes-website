@@ -70,7 +70,7 @@ export default function ForgotPassword() {
       <div className={styles.mainDiv}>
         <div className={styles.centerDiv}>
           <div className={styles.headersDiv}>
-            <h2>Forgot your password?</h2>
+            <h1 className={styles.title}>Forgot your password?</h1>
             <p>{"Don't worry, we've all been through that"}</p>
             <p>
               Please enter your username and email address so that we can help
