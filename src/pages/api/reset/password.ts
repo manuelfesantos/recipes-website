@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { resend } from "@/utils/resend/resend";
 import { getCollection } from "@/utils/mongo-db/db-client";
 import process from "process";
 import { ObjectId } from "mongodb";
